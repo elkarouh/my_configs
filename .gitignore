@@ -22,3 +22,4 @@ config/zed/*.db
 config/zed/logs/
 config/zed/conversations/
 config/zed/remote_servers/
+config/zed/development_credentials
