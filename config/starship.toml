@@ -1,0 +1,131 @@
+# ~/.config/starship.toml
+
+#[prompt]
+#format = """
+#[┌───────────────────>](bold green)
+#[│](bold green)$directory$rust$package
+#[└─>](bold green) """
+# Wait 10 milliseconds for starship to check files under the current directory.
+#scan_timeout = 10
+# Disable the newline at the start of the prompt
+#add_newline = false
+
+
+# Disable the package module, hiding it from the prompt completely
+#[package]
+#disabled = true
+
+[character]
+#success_symbol = "[➜](bold green) "
+error_symbol = "[✖](bold red) "
+#error_symbol = "[✗](bold red) "
+#use_symbol_for_status = true
+#style_success = "bold #00A652"
+#style_failure = "bold #df382c"
+
+[cmd_duration]
+min_time = 2_000  # Show command duration over 2,000 milliseconds (=2 sec)
+#format = " took [$duration]($style)"
+format = " ⏲️  "
+#min_time = 4
+show_milliseconds = false
+disabled = false
+style = "bold italic #87A752"
+
+[directory]
+truncation_length = 5
+format = "[$path]($style)[$lock_symbol]($lock_style) "
+#prefix = " 📂️ "
+
+[git_branch]
+format = " [$symbol$branch]($style) "
+symbol = "🍣 "
+#style = "bold yellow"
+style = "bold italic #87A752"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+
+[git_state]
+#progress_divider = " of "
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count}"
+behind = "🐢 ×${count}"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
+untracked = "🛤️  ×${count}"
+stashed = "📦 "
+modified = "📝 ×${count}"
+staged = "🗃️  ×${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️  ×${count}"
+style = "bright-white"
+format = "$all_status$ahead_behind"
+
+[hostname]
+ssh_only = true 
+format = "@[$hostname]($style) "
+trim_at = "-"
+style = "bold dimmed white"
+#format =  "on [$hostname](bold red) "
+disabled = false
+#prefix = "⟪"
+#suffix = "⟫"
+
+[memory_usage]
+format = "$symbol[${ram}( | ${swap})]($style) "
+#show_percentage = true
+#show_swap = true
+threshold = 70
+style = "bold dimmed white"
+disabled = false
+
+[package]
+disabled = true
+
+[python]
+format = "[$symbol$version]($style) "
+style = "bold green"
+python_binary = "python3"
+
+[time]
+time_format = "%T"
+format = "🕙 $time($style) "
+style = "bright-white"
+disabled = false
+utc_time_offset = "+2"
+
+[username]
+style_user = "bold dimmed blue"
+#style_user = "white bold"
+style_root = "black bold"
+format = "[$user]($style)"
+disabled = false
+show_always = true
+
+[custom.zsh]
+command = "echo 🚀"
+when = '[ "$STARSHIP_SHELL" == "zsh" ]'
+shell = ["bash", "--noprofile", "--norc"]
+#prefix = ""
+
+[custom.bash]
+command = "echo  " 
+when = '[ "$STARSHIP_SHELL" == "bash" ]'
+shell = ["bash", "--noprofile", "--norc"]
+#prefix = ""
+format = "[$output](bg:#AFD700 fg:#111111)[](bg:#464347 fg:#AFD700)"
+
+[custom.fish]
+command = "echo 🐟"
+when = '[ "$STARSHIP_SHELL" == "fish" ]'
+shell = ["ksh", "--noprofile", "--norc"]
+
+[env_var]
+variable = "CM_ENV_ID"
+default = ""
+format = "[ | CM_ENV_ID= $env_value](bold yellow) |"
+
+

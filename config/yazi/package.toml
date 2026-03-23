@@ -1,0 +1,84 @@
+[[plugin.deps]]
+use = "yazi-rs/plugins:hide-preview"
+rev = "ec97f88"
+hash = "b25c2acb08d9ca5ff5cf71ea764fed8d"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-filter"
+rev = "ec97f88"
+hash = "ea24edab4a62c94dbd205adfb6f2c08d"
+
+[[plugin.deps]]
+use = "AnirudhG07/custom-shell"
+rev = "d7fb2b3"
+hash = "bf2dfe68c5dff1dbb898013e4545507e"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:max-preview"
+rev = "ec97f88"
+hash = "9bc26d10d2f6e2aa93b10905b1b76979"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:chmod"
+rev = "ec97f88"
+hash = "4c7e8fd0266eedee7b619d966bd2d025"
+
+[[plugin.deps]]
+use = "h-hg/yamb"
+rev = "0598b8d"
+hash = ""
+
+[[plugin.deps]]
+use = "hankertrix/augment-command"
+rev = "011489a"
+hash = ""
+
+[[plugin.deps]]
+use = "Ape/open-with-cmd"
+rev = "8d7abc8"
+hash = "b562a73ad1413134968d9a949ab8eb1b"
+
+[[plugin.deps]]
+use = "KKV9/command"
+rev = "95a29be"
+hash = "65fff40a0060fe4b1c42d49d29f770fd"
+
+[[plugin.deps]]
+use = "Reledia/glow"
+rev = "5ce76dc"
+hash = "52e5f5c602962e7cbf874da28f52ba45"
+
+[[plugin.deps]]
+use = "dawsers/dual-pane"
+rev = "c2fed12"
+hash = "c7c303f806f5bbbdc863f22956876551"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:toggle-pane"
+rev = "2730199"
+hash = "5c9dda1a587b8f5b6f63e3d5375bda88"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:piper"
+rev = "c648526"
+hash = "2bdc137505b8d9a0cc867a57d0e99b01"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:zoom"
+rev = "e95c7b3"
+hash = "4a47a9cd4d8b3a963cb4cc593664b77e"
+
+[[plugin.deps]]
+use = "macydnah/office"
+rev = "33cc61a"
+hash = "d7e31c616cc6c8a1f05fdff7c47dae98"
+
+[[plugin.deps]]
+use = "boydaihungst/simple-tag"
+rev = "ebcbc9e"
+hash = "fc8d977f168df8ac6db8b5c1167ec777"
+
+[[flavor.deps]]
+use = "dangooddd/kanagawa"
+rev = "b32f205"
+hash = "ccc8e162ce8e9dedae7ae45ba07bb94a"

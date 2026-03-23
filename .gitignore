@@ -1,0 +1,24 @@
+# Editor backups
+*~
+*.bak
+\#*\#
+
+# Helix bundled data (not personal config)
+config/helix/runtime/
+config/helix/themes/
+
+# Lazygit state (not config)
+config/lazygit/state.yml
+
+# Kitty themes bundle (separate git repo)
+config/kitty/kitty-themes/
+
+# Yazi plugins (separate git repos)
+config/yazi/plugins/
+
+# Zed compiled extensions / db
+config/zed/extensions/
+config/zed/*.db
+config/zed/logs/
+config/zed/conversations/
+config/zed/remote_servers/

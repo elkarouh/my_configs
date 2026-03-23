@@ -1,0 +1,136 @@
+theme= "onelight"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor]
+scrolloff = 10
+mouse = true
+line-number = "absolute"
+cursorline = true
+shell = ["ksh", "-c"]
+true-color = true # force the theme to show colors
+color-modes = true
+auto-save = true # save when window looses focus
+# bufferline = "always"
+bufferline = "multiple"
+# line-number = "relative"
+rulers = [130] # show a ruler at column 130
+# scroll-lines = 1
+completion-trigger-len = 2
+popup-border = "all"
+
+[editor.search]
+smart-case = false
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-inlay-hints = true
+
+# left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+# center = ["diagnostics"]
+# right = ["selections", "register", "position", "file-encoding"]
+
+[editor.whitespace.render]
+space = "all"
+tab = "all"
+newline = "none"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+tab = "→"
+newline = "⏎"
+
+[editor.indent-guides]
+character = "|"
+render = true
+
+[editor.gutters]
+layout = ["diff", "diagnostics", "line-numbers", "spacer"]
+
+[editor.file-picker]
+hidden = false
+
+[keys.normal]
+# gw to go to a place in the text (vgw if you also want to select)
+# move line down
+S-A-down = ["extend_to_line_bounds", "delete_selection", "move_line_down","paste_before"]
+S-A-up =   ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+"tab" = "goto_next_buffer"
+"A-." = ["move_prev_word_start", "move_next_word_end", "search_selection"]
+# "*" = ["search_selection", "make_search_word_bounded"] # SEARCH SELECTION AS WHOLE WORD !!!!!
+"*" = ["move_prev_word_start", "move_next_word_end","search_selection", "make_search_word_bounded"] # SEARCH WORD UNDER CURSOR AS WHOLE WORD !!!!!
+# q = ":bc"
+# Q = ":bc!"
+# g = { a = "code_action" } # Maps `ga` to show possible code actions
+# "\\" is how to use \ as the beginning of a mapping,
+# and so this is a subtable of keys.normal for \
+# Move by word by Ctrl+left/right
+"C-right" = "move_next_word_start"
+"C-left" = "move_prev_word_end"
+# Sort action
+# [keys.select.space.x.s]
+# s = ":pipe sort"                                                                     # sort lines
+# u = ":pipe sort -u"                                                                  # unique lines
+# n = ":pipe sort -n"                                                                  # sort lines numeric
+# R = ":pipe sort -R"                                                                  # randomize sorting
+# m = ":pipe sort -M"                                                                  # sort months (eng)
+# i = ":pipe sort -f"                                                                  # sort case insensitive
+# d = ":pipe sort -d"                                                                  # sort sort dictionary order
+# l = ":pipe awk -vOFS='\t' '{ print length($0), $0 }' | sort -k1,1n -k2,2 | cut -f2-" # Sort by length
+[keys.normal."\\"]
+c = ":bc"
+g = "goto_file"
+
+# [keys.normal.y]
+# y = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "normal_mode", "collapse_selection"]
+
+[keys.normal.space]
+# "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
+'.' = ["move_prev_word_start", "move_next_word_end", "search_selection"]
+# "k" = ["miw","search_selection"]
+"," = ":config-open"
+# "=" = ":format"
+# u = ":reset-diff-change"
+g = ":pipe-to wezterm cli split-pane -- helix-live-grep"
+l = ":pipe-to helix-debug-print"
+U = "switch_to_uppercase"
+u = "switch_to_lowercase"
+"`" = "switch_case"
+n = ":sh zellij run -cf -n lf -- lf"
+"=" = ":format"
+"+" = ":indent-style 4"
+"q" = ":q"
+[keys.normal."]"]
+"]" = "goto_next_buffer"
+
+[keys.normal."["]
+"[" = "goto_previous_buffer"
+
+[keys.insert]
+# C-t = ["extend_to_line_bounds", ":pipe sh ~/.config/helix/exec.sh 2>&1", "normal_mode", "open_below"]
+"A-/" = "completion"
+
+[keys.select]
+# C-t = [":pipe sh ~/.config/helix/exec.sh 2>&1"]
+esc = ["collapse_selection", "keep_primary_selection", "normal_mode"] # go to the simplest scenario!
+
+[keys.normal.backspace]
+a = ":set line-number absolute"
+r = ":set line-number relative"
+
+[keys.normal."C-backspace"]
+r = ":config-reload"
+o = ":config-open"
+l = ":o ~/.config/helix/languages.toml"

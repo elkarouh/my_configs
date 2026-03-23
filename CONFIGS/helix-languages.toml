@@ -1,0 +1,33 @@
+############################ LANGUAGE SERVERS ###########################
+[language-server.ruff]
+command = "ruff-lsp"
+
+[language-server.ruff.config.settings]
+args = ["--ignore", "E501", "E111"]
+show-fixes = true
+line-length=119
+
+[language-server.buffer-language-server]
+command = "buffer-language-server"
+
+[language-server.helix-snippets-ls]
+command = "helix-snippets-ls"
+################################# LANGUAGES ############################
+[[language]]
+name = "bash"
+file-types = ["sh", "bash", "ksh", "zsh"]
+shebangs = ["sh", "bash", "ksh"]
+indent = { tab-width = 2, unit = " " }
+
+[[language]]
+name = "python"
+language-servers = [ "pylsp", "ruff", "buffer-language-server", "helix-snippets-ls" ]
+auto-format = true
+# formatter = { command = "sh" , args = ["-c", "black --quiet - | isort -"] }
+indent = { tab-width = 2, unit = " " }
+text-width=120
+
+[[language]]
+name = "ada"
+language-servers = [ "ada-language-server", "buffer-language-server", "helix-snippets-ls" ]
+auto-format = true

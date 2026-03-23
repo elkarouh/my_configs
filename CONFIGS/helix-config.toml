@@ -1,0 +1,246 @@
+theme= "onelight"
+
+[editor.cursor-shape]
+# insert = "bar"
+insert = "block"
+normal = "block"
+select = "underline"
+
+[editor]
+scrolloff = 10
+mouse = true
+line-number = "absolute"
+cursorline = true
+shell = ["ksh", "-c"]
+true-color = true # force the theme to show colors
+color-modes = true
+auto-save = true # save when window loses focus
+# bufferline = "always"
+bufferline = "multiple"
+# line-number = "relative"
+rulers = [130] # show a ruler at column 130
+# scroll-lines = 1
+completion-trigger-len = 1
+popup-border = "all"
+
+[editor.search]
+smart-case = true
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "position-percentage", "file-encoding", "file-line-ending"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-inlay-hints = true
+
+# left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+# center = ["diagnostics"]
+# right = ["selections", "register", "position", "file-encoding"]
+
+[editor.whitespace.render]
+space = "all"
+tab = "all"
+newline = "none"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+tab = "→"
+newline = "⏎"
+
+[editor.indent-guides]
+character = "|"
+render = true
+
+[editor.gutters]
+layout = ["diff", "diagnostics", "line-numbers", "spacer"]
+
+[editor.file-picker]
+hidden = false
+################################# NORMAL MODE KEY BINDINGS###########################################################
+[keys.normal]
+esc = ["collapse_selection", "keep_primary_selection"]
+# gw to go to a place in the text (vgw if you also want to select)
+# move line down/up
+A-down = ["extend_to_line_bounds", "delete_selection", "move_line_down","paste_before"]
+A-up =   ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+C-right = "move_next_word_start"
+C-left = "move_prev_word_end"
+
+"tab" = "goto_next_buffer"
+"A-." = ["move_prev_word_start", "move_next_word_end", "search_selection"]
+"*" = ["move_prev_word_start", "move_next_word_end","search_selection", "make_search_word_bounded"] # SEARCH WORD UNDER CURSOR AS WHOLE WORD !!!!!
+q = ":q"
+A-q= "replay_macro" # keybinding was 'q'
+# Q = ":bc!" this conflicts with record_macro
+V = ["select_mode", "extend_to_line_bounds"]
+# g = { a = "code_action" } # Maps `ga` to show possible code actions
+# Move by word by Ctrl+left/right
+C-home ="goto_file_start"
+C-end = "goto_file_end"
+# Sort action
+C-r = ":config-reload"
+C-o = ":config-open"
+C-q = ":bc!" # same as yazi (close tab)
+# [keys.select.space.x.s]
+# s = ":pipe sort"                                                                     # sort lines
+# u = ":pipe sort -u"                                                                  # unique lines
+# n = ":pipe sort -n"                                                                  # sort lines numeric
+# R = ":pipe sort -R"                                                                  # randomize sorting
+# m = ":pipe sort -M"                                                                  # sort months (eng)
+# i = ":pipe sort -f"                                                                  # sort case insensitive
+# d = ":pipe sort -d"                                                                  # sort sort dictionary order
+# l = ":pipe awk -vOFS='\t' '{ print length($0), $0 }' | sort -k1,1n -k2,2 | cut -f2-" # Sort by length
+# Code actions
+
+# Ctrl + Shift + p -> command palette
+C-p = "command_palette"
+C-P = "command_palette"
+# "A-;" = "toggle_comments"
+# Q = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "paste_primary_clipboard_after"]
+
+# https://www.reddit.com/r/HelixEditor/comments/17tjcb2/add_next_occurence_of_current_word_to_the/
+# make sure there is only one selection, select word under cursor, set search to selection, then switch to select mode
+"C-d" = ["keep_primary_selection", "move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+"C-g" = [":new", ":insert-output lazy-git", ":buffer-close!", ":redraw"]
+"C-h" = [":new", ":insert-output tree -f"]
+############################################################################################################
+# "\\" is how to use \ as the beginning of a mapping,
+# and so this is a subtable of keys.normal for \
+[keys.normal."\\"]
+w= ":w"
+q= ":q!"
+x= ":x"
+c = ":bc"
+g = "goto_file"
+a = ":set line-number absolute"
+r = ":set line-number relative"
+
+# [keys.normal.d]
+# d = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "delete_selection "]
+
+# [keys.normal.y]
+# y = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "normal_mode", "collapse_selection"]
+
+
+[keys.normal.space]
+r = ":sh xdotool type ':sh python3 '; xdotool key ctrl+r; xdotool type %; xdotool key Return"
+# "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
+'.' = ["move_prev_word_start", "move_next_word_end", "search_selection"]
+# k = ["miw","search_selection"] # same as above
+g = ":pipe-to wezterm cli split-pane -- helix-live-grep"
+h = ":pipe-to wezterm cli split-pane -- helix-run" # example of running a command and collecting output in new buffer
+l = ":pipe-to wezterm cli split-pane -- helix-run-ls" # example of running a command and collecting output in new buffer
+# l = ":pipe-to helix-debug-print"
+U = "switch_to_uppercase"
+u = "switch_to_lowercase"
+"`" = "switch_case"
+"=" = ":format"
+"+" = ":indent-style 4"
+"q" = ":q!"
+"x" = ":x"
+
+[keys.normal.space.e]
+x = ":pipe sh"                                    # Execute in sh
+p = ":pipe python3"                               # Execute in python
+b = ":pipe xargs -I {} echo {} | bc | head -c -1" # Execute in bc calculator
+r = ":pipe tac"                                   # Reverse lines
+f = ":pipe fmt"                                   # Format and wrap
+h = ":pipe shuf"                                  # Shuffle lines
+o = ":pipe shuf -n 1"                             # Keep One line
+C = ":pipe cowsay"                                # Insert selected as cowsay
+[keys.normal."]"]
+"]" = "goto_next_buffer"
+[keys.normal."["]
+"[" = "goto_previous_buffer"
+
+[keys.insert]
+esc = ["collapse_selection", "normal_mode"]
+# C-t = ["extend_to_line_bounds", ":pipe sh /auto/home/ekhassan/.config/helix/exec.sh 2>&1", "normal_mode", "open_below"]
+"A-/" = "completion"
+# move line down/up
+A-up =   ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+A-down = ["extend_to_line_bounds", "delete_selection", "move_line_down","paste_before"]
+
+C-right = "move_next_word_start"
+C-left = "move_prev_word_end"
+[keys.select]
+esc = ["collapse_selection", "keep_primary_selection", "normal_mode"] # go to the simplest scenario!
+# C-t = [":pipe sh /auto/home/ekhassan/.config/helix/exec.sh 2>&1"]
+
+# if already in select mode, just add new selection at next occurrence
+"C-d" = ["search_selection", "extend_search_next"]
+"A-right" = "expand_selection"
+
+C-right = "move_next_word_start"
+C-left = "move_prev_word_end"
+
+[keys.normal.backspace]
+r = ":config-reload"
+o = ":config-open"
+l = ":o /auto/home/ekhassan/.config/helix/languages.toml"
+d = ":sh xdotool type ':sh python3 '; xdotool key ctrl+r; xdotool type %; xdotool key Return"
+# d = ":sh run.sh %val{filename} > /tmp/run.log 2>&1"
+h = [":new", ":insert-output xdotool type ':sh python3 '; xdotool key ctrl+r; xdotool type %; xdotool key Return"]
+
+# Insert boxes
+[keys.select.space.i]
+"a" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d ada-box"
+[keys.normal.space.i]
+"a" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d ada-box"
+"minus" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d ada-cmt"
+"C-5" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d tex-cmt"
+"C-8" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d cc"
+"b" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d boxquote"
+"B" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d boy"
+"c" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d columns"
+"C" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d cowsay"
+"h" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d headline"
+"i" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d important"
+"j" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d javadoc"
+"J" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d jstone"
+"l" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d simple"
+"n" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d nuke"
+"*" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d c"
+"(" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d caml"
+"?" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d c-cmt"
+"!" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d f90-box"
+"<" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d html"
+"," = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d html-cmt"
+"/" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d java-cmt"
+";" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d lisp-cmt"
+"#" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d pound-cmt"
+"+" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d stone"
+"%" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d tex-box"
+'"' = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d vim-box"
+"'" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d vim-cmt"
+")" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d whirly"
+"p" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d parchment"
+"r" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d right"
+"s" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d scroll"
+"S" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d shell"
+"u" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d underline"
+"U" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d unicornsay"
+"x" = ":pipe boxes -f /auto/home/ekhassan/.boxes/boxes.cfg -d tux"
+# Insert figlet
+[keys.normal.space.c]
+b = ":pipe myfiglet.ksh banner"
+B = ":pipe myfiglet.ksh big"
+k = ":pipe myfiglet.ksh block"
+o = ":pipe myfiglet.ksh bubble"
+d = ":pipe myfiglet.ksh digital"
+l = ":pipe myfiglet.ksh lean"
+m = ":pipe myfiglet.ksh mini"
+M = ":pipe myfiglet.ksh mnemonic"
+s = ":pipe myfiglet.ksh small"
+S = ":pipe myfiglet.ksh shadow"
+T = ":pipe myfiglet.ksh script"
+i = ":pipe myfiglet.ksh slant"
+I = ":pipe myfiglet.ksh ivrit"
+f = ":pipe myfiglet.ksh standard"
+t = ":pipe myfiglet.ksh term"
