@@ -2,6 +2,7 @@
 alias rfd='fd --changed-within 1day' # fd for recent files
 alias fdh='fd -H' # search also hidden directories
 alias fd.='fd -H -d1' # only search in current dir, also for hidden files, no subdirs !!!
+alias fdx="fd -d1 -tf '^[^.]+$'" # find files without extensions in curr dir
 fdfile () {
   FILENAME=$1
   shift

@@ -78,6 +78,11 @@ use = "boydaihungst/simple-tag"
 rev = "ebcbc9e"
 hash = "fc8d977f168df8ac6db8b5c1167ec777"
 
+[[plugin.deps]]
+use = "AnirudhG07/rich-preview"
+rev = "7d616ad"
+hash = "d64feec9761392cbc250d199ab4b8a3a"
+
 [[flavor.deps]]
 use = "dangooddd/kanagawa"
 rev = "b32f205"

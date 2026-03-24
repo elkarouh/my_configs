@@ -8,6 +8,7 @@ alias docker=podman
 ###################### clipboard #######################
 alias hpaste='xsel --clipboard' # pipe into hclip to paste to the clipboard
 ###############################################################################
+alias termaid='python -m termaid'
 alias wssh='wezterm ssh'
 #alias hclock='TZ=Europe/Brussels xclock -d -strftime "%H:%M:%S"'
 alias hclock='TZ=Europe/Brussels xclock -d -brief -chime'
