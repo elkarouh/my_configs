@@ -1,0 +1,29 @@
+[
+        {"keys":["ctrl+f2"],"command":"toggle_side_bar"},
+        {"keys":["alt+up"],"command":"swap_line_up"},
+        {"keys":["alt+down"],"command":"swap_line_down"},
+
+    { "keys": ["ctrl+x"], "command": "cut" },
+    
+        // this is for Buildview plugin !!
+        {"context": [{"key": "build_fake", "operator":"equal", "operand":true}]},
+        // text highlighter
+        {"keys": ["ctrl+."], "command": "text_highlighter_toggle" },
+        {"keys": ["ctrl+super+."], "command": "text_highlighter_toggle", "args": { "color": "markup.changed.git_gutter"} },
+        {"keys": ["ctrl+super+h"], "command": "text_highlighter_clear_all" },
+
+        { "keys": ["ctrl+f4"], "command": "close" },
+
+        // Terminus terminal
+        { "keys": ["ctrl+t"], "command": "terminus_open", "args": { "cwd": "${file_path:${folder}}" } },
+
+        // Terminus Home/End - send ANSI escape sequences directly
+        { "keys": ["home"], "command": "terminus_send_string", "args": {"string": "\u001b[H"},
+            "context": [{ "key": "terminus_view" }] },
+        { "keys": ["end"], "command": "terminus_send_string", "args": {"string": "\u001b[F"},
+            "context": [{ "key": "terminus_view" }] },
+        { "keys": ["ctrl+a"], "command": "terminus_keypress", "args": {"key": "a", "ctrl": true},
+            "context": [{ "key": "terminus_view" }] },
+        { "keys": ["ctrl+e"], "command": "terminus_keypress", "args": {"key": "e", "ctrl": true},
+            "context": [{ "key": "terminus_view" }] }
+]

@@ -62,6 +62,7 @@ config/yazi/plugins/toggle-pane.yazi|$HOME/.config/yazi/plugins/toggle-pane.yazi
 config/yazi/plugins/zoom.yazi|$HOME/.config/yazi/plugins/zoom.yazi
 config/zed/keymap.json|$HOME/.config/zed/keymap.json
 config/zed/settings.json|$HOME/.config/zed/settings.json
+config/sublime-text/Packages/User/Default (Linux).sublime-keymap|$HOME/.config/sublime-text/Packages/User/Default (Linux).sublime-keymap
 "
 
 sync_item() {
@@ -72,6 +73,8 @@ sync_item() {
     if [[ $DIRECTION == pull ]]; then
         local src=$live dst=$repo
     else
+        echo "ARE YOU SURE?"
+        exit
         local src=$repo dst=$live
     fi
 
