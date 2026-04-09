@@ -286,6 +286,8 @@ vncviewer dhws024:10 # serge
 vncviewer dhbldd19:99 # overview of all WS
 vncviewer dhdevd01:99 # build master machine
 
+vncviewer ptacprq:90 # 29
+vncviewer ptacprg:33 # 28
 vncviewer ptacvg5:90 # 28.0
 vncviewer pprevg3:90 # ?
 vncviewer dhdevd17:0 # ?
@@ -294,8 +296,6 @@ vncviewer ptacprg:5 # 27.2
 vncviewer ptacot9:50 # 27.2
 vncviewer pprepre:90 # 28.0
 vncviewer ptacprg:90 # 27.2
-vncviewer ptacprq:90 # 27.2
-vncviewer ptacprg:33 # 27.2
 vncviewer dhbldd01:99 # BUILDS MACHINE
 vncviewer dhbldd25:18
 vncviewer dhbldd25:2

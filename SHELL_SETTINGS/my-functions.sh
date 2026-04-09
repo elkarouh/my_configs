@@ -562,6 +562,9 @@ elif [[ "$TERM_PROGRAM" = 'vscode' ]]; then
 elif [[ "$TERM_PROGRAM" = 'zed' ]]; then
   alias o='zd -a'
   EDITOR='zed'
+elif [[ "$TERM_PROGRAM" = 'Terminus-Sublime' ]]; then
+  alias o='sb'
+  EDITOR='sb'
 else
   EDITOR=hx
 fi

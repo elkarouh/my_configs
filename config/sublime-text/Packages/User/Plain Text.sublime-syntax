@@ -1,0 +1,6 @@
+---
+# http://www.sublimetext.com/docs/syntax.html
+name: Build Output
+scope: text.plain.build
+contexts: main: [].
+

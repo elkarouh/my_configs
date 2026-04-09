@@ -1,0 +1,13 @@
+[
+    {
+        "class": "tab_control",
+        "attributes": ["selected"],
+        "tint": "#f0f0f0",
+        "label_color": "#333333"
+    },
+    {
+        "class": "tab_control",
+        "tint": "#e0e0e0",
+        "label_color": "#666666"
+    }
+]

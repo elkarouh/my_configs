@@ -1,0 +1,11 @@
+{
+    "font_size": 16,
+    "output.panel.fontSize": 12,
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+	"color_scheme": "Mariana.sublime-color-scheme",
+	"index_files": true,
+	"theme": "mooon-light.sublime-theme",
+}

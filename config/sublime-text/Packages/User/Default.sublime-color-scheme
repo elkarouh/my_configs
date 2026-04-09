@@ -1,0 +1,25 @@
+{
+    "variables": {
+        "tab_text": "#2d3139",
+        "tab_inactive_text": "#555555",
+        "tab_active_background": "#d4d4d4",
+        "tab_inactive_background": "#e8e8e8"
+    },
+    "rules": [
+        {
+            "class": "tab_control",
+            "attributes": ["selected"],
+            "settings": {
+                "tab_text": "#2d3139",
+                "tint": "#d4d4d4"
+            }
+        },
+        {
+            "class": "tab_control",
+            "settings": {
+                "tab_text": "#555555",
+                "tint": "#e8e8e8"
+            }
+        }
+    ]
+}

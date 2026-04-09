@@ -1,0 +1,31 @@
+{
+	"bootstrapped": true,
+	//"http_proxy": "http://pac.eurocontrol.int:9512",
+	//"https_proxy": "https://pac.eurocontrol.int:9512",
+	//"proxy_username": "ekhassan",
+	//"proxy_password": "************",	
+	"channels":
+	[
+	"https://packagecontrol.io/channel_v3.json",
+	],
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Ada",
+		"Advanced CSV",
+		"BracketHighlighter",
+		"GitGutter",
+		"Insert Nums",
+		"Mooon Light Theme",
+		"MultiEditUtils",
+		"Nim",
+		"Package Control",
+		"Python 3",
+		"Theme - Numix Light",
+	],
+	"repositories":
+	[
+	],
+}

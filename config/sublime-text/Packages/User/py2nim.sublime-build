@@ -1,0 +1,7 @@
+{
+    "cmd": ["py2nim", "$file"],
+    "file_regex": "^(.+):(\\d+):(\\d+): (.+)$",
+    "selector": "source.nim",
+    "path": "/auto/home/ekhassan/bin:$PATH",
+    "variants": []
+}

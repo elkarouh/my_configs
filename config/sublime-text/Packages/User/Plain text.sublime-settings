@@ -1,0 +1,6 @@
+// These settings override both User and Default settings for the Plain text syntax
+{
+	"font_size": 12,
+	"highlight_line":true,
+	"open_files_in_new_window": false,
+}

@@ -10,10 +10,13 @@ get_machine() {
     my_cecho fs "$USER@$HOSTNAME: "
   fi
 }
-get_cwd() {
-  my_cecho sWb "[${PWD//!/.}]"
-}
 
+get_cwd() {
+  local cwd="${PWD//!/.}"
+  cwd="${cwd/#$HOME/~}"
+  cwd=$(echo "$cwd" | sed 's|^/auto/home/\([^/]*\)|~\1|')
+  my_cecho sWb "[${cwd}]"
+}
 get_time() {
   time=$(TZ="Europe/Brussels" date +"%T")
   my_cecho sWr "[$time]"
@@ -65,13 +68,19 @@ find_git_dirty() {
   else
     git_dirty=''
   fi
-  echo $git_dirty
+  echo "$git_dirty"
 }
 ##########################################################################
 get_prompt() {
-  printf "$(get_machine)$(get_cwd)
-  $(get_time) $(get_view) $(get_proxy)$"
+  local branch=$(find_git_branch)
+  local dirty=$(find_git_dirty)
+  local git_info=""
+  if [[ -n "$branch" ]]; then
+    git_info=" $(my_cecho sYb "${branch}${dirty}")"
+  fi
+  printf "$(get_machine)$(get_cwd)${git_info}
+$(get_time)$(get_view) $(get_proxy)$"
 }
-#$(get_time) $(get_view) $(get_proxy)${find_git_branch}$
+
 ######################################################################
 ##  PS1='$(get_prompt)'  this is not necessary

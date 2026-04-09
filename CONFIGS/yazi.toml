@@ -9,8 +9,8 @@ ratio          = [ 0, 4, 4 ]
 #sort_by        = "modified"
 sort_by        = "mtime"
 sort_sensitive = false
-sort_reverse   = true
-sort_dir_first = false
+sort_reverse   = false
+sort_dir_first = true
 #linemode       = "none"
 linemode       = "mtime"
 show_hidden    = true
@@ -94,35 +94,21 @@ suppress_preload = false
 
 [plugin]
 
-# preloaders = [
-# 	{ name = "*", cond = "!mime", run = "mime", multi = true, prio = "high" },
-# 	# Image
-# 	{ mime = "image/vnd.djvu", run = "noop" },
-# 	{ mime = "image/*",        run = "image" },
-# 	# Video
-# 	{ mime = "video/*", run = "video" },
-# 	# PDF
-# 	{ mime = "application/pdf", run = "pdf" },
-# ]
-# prepend_preloaders = [
-#     # Office Documents
-#     { mime = "application/openxmlformats-officedocument.*", run = "office" },
-#     { mime = "application/oasis.opendocument.*", run = "office" },
-#     { mime = "application/ms-*", run = "office" },
-#     { mime = "application/msword", run = "office" },
-#     { name = "*.docx", run = "office" },
-# ]
-
-
-
 previewers = [
 	##### { name = "*/", run = "hek-fzf-preview", sync = true },
 	########## { name = "*/", run = "folder", sync = true },
 	{ name = "*/",run  = 'piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'},
-    # markdown
-    ########### { name = "*.md", run = "glow" },
-    ########### { name = "*.md", run  = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'},
-    { name = "*.md", run  = 'piper -- rich -j --left --panel=rounded --guides --line-numbers --force-terminal "$1"'},
+    { name = "*.hpy", run  = 'piper -- rich -x nim -j --left --panel=none --guides --line-numbers --force-terminal "$1"'},    
+    { name = "*.md", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.py", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.adb", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.ads", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.toml", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.ksh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.sh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.txt", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.lua", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { name = "*.pl", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
 	# Code
 	{ mime = "text/*",                 run = "rich-preview" },
 	{ mime = "*/xml",                  run = "rich-preview" },
@@ -155,9 +141,6 @@ previewers = [
 	#{ name = "*", run = "hek-fzf-preview" },
 	{ name = "*", run = 'piper -- hexyl --border=none --terminal-width=$w "$1"'},
 ]
-[[plugin.prepend_previewers]]
-name = "*.hpy"
-run  = 'piper -- rich -x nim -j --left --panel=rounded --guides --line-numbers --force-terminal "$1"'
 
 [input]
 # cd

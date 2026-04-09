@@ -63,6 +63,8 @@ config/yazi/plugins/zoom.yazi|$HOME/.config/yazi/plugins/zoom.yazi
 config/zed/keymap.json|$HOME/.config/zed/keymap.json
 config/zed/settings.json|$HOME/.config/zed/settings.json
 config/sublime-text/Packages/User/Default (Linux).sublime-keymap|$HOME/.config/sublime-text/Packages/User/Default (Linux).sublime-keymap
+config/sublime-text/Packages/ClaudeCode|$HOME/.config/sublime-text/Packages/ClaudeCode
+config/sublime-text/Packages/Terminus|$HOME/.config/sublime-text/Packages/Terminus
 "
 
 sync_item() {

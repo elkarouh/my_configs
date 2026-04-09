@@ -23,3 +23,5 @@ config/zed/logs/
 config/zed/conversations/
 config/zed/remote_servers/
 config/zed/development_credentials
+
+github-recovery-codes.txt

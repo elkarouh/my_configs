@@ -1,0 +1,23 @@
+{
+    "name": "My Light",
+    "theme_colors": {
+        "foreground": "#2d2d2d",
+        "background": "#f1f1f1",
+        "black": "#212121",
+        "red": "#b0003a",
+        "green": "#007a3d",
+        "brown": "#5a4a00",
+        "blue": "#0050a0",
+        "magenta": "#6600aa",
+        "cyan": "#007a8a",
+        "white": "#aaaaaa",
+        "light_black": "#555555",
+        "light_red": "#cc0000",
+        "light_green": "#004d00",
+        "light_brown": "#3a2d00",
+        "light_blue": "#0070cc",
+        "light_magenta": "#8800cc",
+        "light_cyan": "#008a99",
+        "light_white": "#2d2d2d"
+    }
+}
