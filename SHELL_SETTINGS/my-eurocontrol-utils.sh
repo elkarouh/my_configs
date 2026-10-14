@@ -1,3 +1,4 @@
+
 alias hls='Clsco'
 alias hsb='Cshow_branches -f -noc'
 alias latest_tact_baseline='ls -ld /cm/ot/TACT/TACT_CONFIG.LATEST | cut -d. -f6'
@@ -11,66 +12,44 @@ alias minx='| tr '\n' '\0' | xargs -0 -t -p -I {}'  # allows 'Cshow_branches min
 ###################################
 alias broum='killnet > s.out 2>&1;Start_TACT >> s.out 2>&1 &'
 alias monobroum='mono_process -i tacot.init.el  > $SVLOGS/mono.out 2>&1 & ; echo output redirected look at it with tail -f $SVLOGS/mono.out'
-alias CTG='cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.LATEST_GOOD -e G!31.IP.L8" cmadm.default_view'
-alias CTOG='cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.LATEST_GOOD -e G!31.OP.L8" cmadm.default_view'
-alias CI='cleartool setview -exec "Ccontext -b IFPS.FPL_CONFIG.LATEST  -e G!31.IP.L8" cmadm.default_view'
-# alias CT='cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.LATEST -e G!31.IP.L8" cmadm.default_view'
-function CT {
+function CT.broken {
   [ $# -ne 0 ] && cecho Wy "'cdlog' to go to the logs directory"
-  BASELINE=$([ $# -eq 0 ] && echo LATEST || echo 29.0.0.$1)
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.$BASELINE -e G!31.IP.L8" cmadm.default_view
+  BASELINE=$([ $# -eq 0 ] && echo LATEST || echo 30.0.0.$1)
+  Ccontext -b TACT.TACT_CONFIG.$BASELINE -e G!31.IP.L8
+}
+alias CT="Ccontext -b TACT.TACT_CONFIG.LATEST -e G!31.IP.L8"
+alias CTO="Ccontext -b TACT.TACT_CONFIG.LATEST -e G!31.OP.L8"
+alias CFMU='Ccontext -b CFMUTEST.CFMUTEST_CONFIG.LATEST'
+function CTT {
+  BASELINE=$([ $# -eq 0 ] && echo LATEST || echo 30.0.0.$1)
+  Ccontext -b TACT.TACT_CONFIG.$BASELINE 
 }
 
-function CFMU {
-  cleartool setview -exec "Ccontext -b CFMU.CFMU_CONFIG.LATEST" cmadm.default_view
-}
-function ct27 {
-  cleartool setview -exec "ccontext -b tact.tact_config.27.0.0.${1:-latest} -e g!30.IP.L8" cmadm.default_view
-}
-function CT271 {
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.27.1.0.${1:-LATEST} -e G!30.IP.L8" cmadm.default_view
-}
-function CT272 {
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.27.2.0.${1:-LATEST} -e G!30.IP.L8" cmadm.default_view
-}
-function CTO272 {
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.27.2.0.${1:-LATEST} -e G!30.OP.L8" cmadm.default_view
-}
-function ct270 {
-  cleartool setview -exec "ccontext -b tact.tact_config.27.0.0.${1:-latest} -e g!30.OP.L8" cmadm.default_view
-}
-function CT26 {
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.26.0.0.${1:-LATEST} -e G!27.IP.L8" cmadm.default_view
-}
-function CT28 {
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.28.1.0.${1:-LATEST} -e G!31.IP.L8" cmadm.default_view
-}
-
-function CTO {
-  [ $# -ne 0 ] && cecho Wy "'cdlog' to go to the logs directory"
-  BASELINE=$([ $# -eq 0 ] && echo LATEST || echo 29.0.0.$1)
-  cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.$BASELINE -e G!31.OP.L8" cmadm.default_view
-}
-
-#alias CE='cleartool setview -exec "Ccontext -b ELD.ELD_CONFIG.LATEST -e G!31.IP.L8" cmadm.default_view'
-function CE {
-  BASELINE=$([ $# -eq 0 ] && echo LATEST || echo 28.1.0.$1)
-  cleartool setview -exec "Ccontext -b ELD.ELD_CONFIG.$BASELINE -e G!31.IP.L8" cmadm.default_view
-}
-function CE272 {
-  BASELINE=$([ $# -eq 0 ] && echo 27.2.0.LATEST || echo 27.2.0.$1)
-  cleartool setview -exec "Ccontext -b ELD.ELD_CONFIG.$BASELINE -e G!31.IP.L8" cmadm.default_view
-}
-## As long as you need frequent help keep these aliases in your .kshrc
-alias Ct=cleartool
-alias Csb='cd /home/$(whoami)/cm/; Csetup -view_build_setup '
-alias CO='Ccontext -e ${CM_ENV_ID/IP/OP}'
 ####################################################################
-pause_until_key_pressed () {
-  #python -c "raw_input('Press enter to continue...')" # the only portable way for all shells !!!
-  python3 -c "input('Press enter to continue...')" # the only portable way for all shells !!!
-  cecho sWr "\ncontinuing ..."
-  echo
+show_builds() {
+  fdl -L --max-depth 1 -td $1 /cm/ot/TACT/
+}
+function see_Tlogs() {
+  function find_Tlogs {
+    cd /cm/ot/TACT
+    USER=${1:-EKHASSAN} # DEFAULT PARAMETER IS EKHASSAN
+    USER=$(python -c "print ('${USER}'.upper())")
+    fd -td -L -d1 -0 -p ${USER} | xargs -0 ls -td | while read dir; do
+      fd -e log Tlog-in $dir
+    done
+  }
+  function find_new_failing_tests {
+    file=$1
+    echo $file
+    #start_line_number=$(echo "a=\"$(rg -n 'New tests failing' $file)\".split(':');print(a[0])" | python)
+    start_line_number=$(python -c "a=\"$(rg -n 'New tests failing' $file)\".split(':');print(a[0])")
+    echo "start linenumber=$start_line_number"
+    end_line_number=$(rg -n "Tests still failing" $file | cut -d ':' -f 1)
+    awk "NF && NR >= $start_line_number && NR < $end_line_number" $file | rg '\w*\.el\b'
+    #echo "emacs +$start_line_number \"$file\"" | xclip -selection clipboard
+    echo "emacs +$start_line_number \"$file\"" | write2prompt
+  }
+  find_new_failing_tests "/cm/ot/TACT/$(find_Tlogs "$1" | fzf -e)"
 }
 
 function htactdev {
@@ -107,52 +86,84 @@ alias niemapc='ssh -X cssoop1@dhssod02'
 #
 #############################################################################
 # THIS FILE CONTAINS cd-related FUNCTIONS SO IT NEEDS TO BE SOURCED
-cdv() { # cd to home dir of a view when in tactdev env or in a view
-  myview=$(cleartool pwv -short)
-  # echo "VIEW=$myview"
-  if [[ ${myview:0:2} == '**' ]]; then
-    echo "Not in a view, do nothing" >&2
-    return
-  fi
-  cd $HOME/${CLEARCASE_ROOT/\/view/cm}
+cdw() { # cd to home dir of a workspace when in tactdev env or in a workspace
+  cd ${CMA_WORKSPACE_NM_REPOSITORY_DIRECTORY}
+  #cd ${CMA_WORKSPACE_DATA_DIRECTORY}
+}
+
+cdww() { # cd to working dir
+  cd ${CMA_WORKSPACE_DATA_DIRECTORY}/work/Pmake
 }
 
 cdop() {
-        cd ${PWD//IP/OP}
-}
-cdip() {
-        cd ${PWD//OP/IP}
+  if [[ $PWD == *IP* ]]; then
+    new_pwd="${PWD%IP*}OP${PWD##*IP}"
+    cd "$new_pwd"
+  fi
 }
 
-cdb() { # cd to the build log directory of the current view
-  if [[ -z "${CLEARCASE_ROOT}" ]]; then
+cdip() {
+  #cd ${PWD//OP/IP}
+  if [[ $PWD == *OP* ]]; then
+    new_pwd="${PWD%OP*}IP${PWD##*OP}"
+    cd "$new_pwd"
+  fi
+}
+
+#setopt bareglobqual nullglob noksh_glob   # needed because of ksh emulation
+
+has_build_dir() {
+    local d
+    for d in "$1"/build*; do
+        [[ -d $d ]] && return 0
+    done
+    return 1
+}
+
+find_build_dir_for_view() {
+    local view_name=${1-$CMA_WORKSPACE}
+    local VIEW_NAME=${(U)view_name}   # short view name in uppercase
+    local submodule log_dir_root
+
+    for submodule in $(cat ~/bin/CFMU_SUBMODULES.txt); do
+        submodule=${submodule//./\/}
+        log_dir_root="/cm/ot/${submodule}.${VIEW_NAME}"
+        if has_build_dir "$log_dir_root"; then
+            echo "${log_dir_root}"
+            return 0
+        fi
+    done
+
+    echo "NO BUILD FOUND" >&2
+    return 1
+}
+
+cdb() {
+  if [[ ! -v CONTEXT_CM_BASELINE ]]; then
     echo >&2 "NOT IN A CONTEXT !!! exiting"
     return 1
   fi
-  if [ $CLEARCASE_ROOT = /view/cmadm.default_view ]; then
+  if [[ ! -v CMA_WORKSPACE ]]; then
     cd $TACT_TACT_CONFIG_HOME/saved_logs
   else
-    view_name=$(cleartool pwv -short)
-    VIEW_NAME=${(U)view_name} # short view name in uppercase
-    view_type=$(Clsview | tr -s ' ' | tr ' ' '.' | grep $view_name | cut -d . -f 3)
-    if [[ $view_type == TACT ]]; then
-      log_dir_root="/cm/ot/TACT/TACT_CONFIG.$VIEW_NAME"
-    else # must be IFPS
-      log_dir_root="/cm/ot/IFPS/FLIGHT_CONFIG.$VIEW_NAME"
+    log_dir_root=$(find_build_dir_for_view $CMA_WORKSPACE) || exit 1
+    log_dir_IP=${log_dir_root}/build_G!31.IP.L8/saved_logs
+    if [[ ! -d $log_dir_IP ]]; then
+        log_dir_IP="${log_dir_root}/build_G!31.IP.L8/"
     fi
-    log_dir_IP="${log_dir_root}/build_G!31.IP.L8/saved_logs"
+    echo "===============> ${log_dir_IP}"
     case $CFMU_BUILD_TYPE in
       IP)
         echo IP_BUILD
         if [[ -d $log_dir_IP ]]; then
           cd $log_dir_IP
         else
-          cd ${log_dir_IP//IP/OP} || exit
+          cd "${log_dir_IP%IP*}OP${log_dir_IP##*IP}" || exit
         fi
         ;;
       OP)
         echo OP_BUILD
-        cd ${log_dir_IP//IP/OP} || exit
+        cd "${log_dir_IP%IP*}OP${log_dir_IP##*IP}" || exit
         ;;
       *)
         echo >&2 "No build available"
@@ -276,11 +287,9 @@ rtd() { # REMOVE A TACTDEV
 
 
 vb() { # set up a view build within a view context !!!
-  # view=$(cleartool pwv | tail -1 | cut -f 3 -d " ")
-  # view_name=$(echo $view  |  cut -f 2 -d.) # short view name
-  view=$(cleartool pwv -short)
-  VIEW_NAME=$(echo $view | tr a-z A-Z) # short view name in uppercase
-  Ccontext -b TACT.TACT_CONFIG.$VIEW_NAME
+    view_name=$CMA_WORKSPACE
+    VIEW_NAME=${(U)view_name} # short view name in uppercase
+    Ccontext -b TACT.TACT_CONFIG.$VIEW_NAME
 }
 
 humanize() {
@@ -324,133 +333,9 @@ svo25() { # set view for an optimized build
   fi
 }
 
-############################################## PYTHON VIEWS ###############################################
-choose-python-view() {
-  view=$(lpv | fzfmenu)
-  echo "$view"
-}
 
-lpv() { # list python VIEWS
-  fd -tl -d 1 . ~/.virtualenvs/ -x echo {/}
-}
-
-spv() { # set python view (virtual env)
-  view_dir=$(choose-python-view)
-  if [ -n $view_dir ];then
-    cd ~/.virtualenvs/
-    cd $(readlink ${view_dir})
-    source bin/activate
-    alias pexit='deactivate'
-    echo "USE 'pexit' or 'deactivate' to exit"
-  fi
-}
-
-mpv() { # make python view (virtual env)
-  view_name=$1
-  version=${2:-3.11}
-  if python${version} -m venv ${view_name} ; then
-    cur_dir=$(pwd)/${view_name}
-    cd ~/.virtualenvs/
-    ln -s $cur_dir "${view_name}-${version}"
-    cd $cur_dir
-    echo "PYTHON${version} VIEW '$view_name' CREATED"
-  fi
-}
-
-dpv() { # delete python VIEW
-    view_dir=$(choose-python-view)
-    cd ~/.virtualenvs
-    data_dir=$(readlink ${view_dir})
-    echo "DELETING SYMLINK ${view_dir}"
-    rm ${view_dir} # delete the symbolic link
-    # now delete the directory
-    echo "DELETING $data_dir"
-    rm -fr $data_dir
-    cd -
-    }
 ###########################################################################################################
-set_replay_context() {
-  export CM_ENV_ID=G!31.OP.L8
-  if [ $# -eq 0 ]
-  then
-    echo "BASELINE NUMBER REQUIRED, e.g. 160"
-  else
-    cleartool setview -exec "Ccontext -b TACT.TACT_CONFIG.28.1.0.$1 -e G!31.OP.L8" cmadm.default_view
-  fi
-  }
-# alias bv='Tbuild_view -dir /cm/local_build -del -para 24'
-bvDELETE() { # build view
-  cdv
-  if [ $# -eq 0 ];then
-    prequal_replay_options=""
-  else
-    prequal_replay_options='-replay "db_instance" "TAC_LO3" "ora_instance" "${DEFAULT_ORA_LO}" "prequal"'
-    prequal_replay_options="-replay prequal assert none"
-    if [[ $CM_ENV_ID != *"OP"* ]]; then
-      echo PREQUAL VIEW BUILD MUST RUN IN OPTIMISED MODE
-      echo use the svo alias
-      exit 1
-    fi
-  fi
-  myview=$(cleartool pwv | tail -1 | cut -d' ' -f3)
-  if [[ $myview == '**' ]]; then
-    echo "You are not in the context of a view, please switch to a TACT or IFPS view" >&2
-    return
-  fi
-  if [[ $myview == *"_e" ||  $myview == *"_eld" ]]; then
-    echo "An ELD view cannot be built on its own, please switch to TACT view" >&2
-    return
-  fi
-  if [[ $myview == *"_i" ]]; then
-    print -z "Cbuild_view -dir best -del"
-    return
-  fi
-  if [[ $myview != *"_t" && $myview != *"_tact" ]]; then
-    echo "view $myview has to follow '_t' or '_tact' suffix convention" >&2
-    return
-  fi
-  myviews=( $(Clsview | awk '/ekhassan./{if ($1=="ekhassan") print $2; else print $1}') )
-  if [[ $myview == *"_t" ]]; then
-    eld_view="${myview:0: -2}_e"
-    ifps_view="${myview:0: -2}_i"
-  else
-    eld_view="${myview:0: -5}_eld"
-    ifps_view="${myview:0: -5}_ifps"
-  fi;
-  if printf '%s\n' "${myviews[@]}" | grep -q --line-regex $eld_view; then
-    eld_view_exists="TRUE"
-  fi
-  if printf '%s\n' "${myviews[@]}" | grep -q --line-regex $ifps_view; then
-    ifps_view_exists="TRUE"
-  fi
-  if [[ -n $eld_view_exists ]] && [[ -n $ifps_view_exists ]]; then
-    print -z $(echo "Tbuild_view -eld $eld_view -ifps $ifps_view -dir best -del -para 24 $prequal_replay_options")
-  elif [[ -n $eld_view_exists ]]; then
-    print -z $(echo "Tbuild_view -eld $eld_view -dir best -del -para 24 $prequal_replay_options")
-  else
-    print -z "Tbuild_view -dir best -del -para 24 $prequal_replay_options"
-  fi;
-}
-
-hcompareOBSOLETE () {
-  cdv
-  remote_file=$(fd -tf $1 $CM_VOB | fzf)
-  remote_dir="${remote_file}@@/main"
-  echo "REMOTE FILE=$remote_file"
-  echo "REMOTE_DIR=$remote_dir"
-  old_version1=$(fd '^\d{1,3}' --max-depth 1 $remote_dir | fzf)
-  if [ ! "$#" -gt 1 ]
-  then
-    echo "BASELINE=$remote_file"
-    kompare $remote_file $old_version1 2>/dev/null
-  else
-    old_version2=$(fd '^[0-100]' --max-depth 1 $remote_dir | fzf)
-    kompare $old_version1 $old_version2 2>/dev/null
-    #meld ${remote_file}@@/main/$3 ${remote_file}@@/main/$2 2>/dev/null
-  fi;
-  }
-
-hcomplogOBSOLETE () { # compare logs
-  Tcompare_last $1 $2
-  kompare Tcompare_last_1.comp Tcompare_last_2.comp
-}
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+alias wdv='GIT_DIFF_TOOL=meld git difftool -d'
+alias ch='Tchanges -head'
+alias whci='Ccheckin $(Tchanges -head)'

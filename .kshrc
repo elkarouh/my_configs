@@ -23,8 +23,11 @@ then
 fi
 ###############################################################
 ###################################### THE BELOW IS MINE ######################################################
-if [[ "$INSIDE_EMACS" = 'vterm' || "$INSIDE_EMACS" = *eat ]]
-then
+if [[ "$INSIDE_EMACS" = 'ghostel' ]]; then
+  _ghostel_osc7() { printf '\e]7;file://%s%s\e\\' "$(hostname)" "$PWD"; }
+  precmd() { _ghostel_osc7; }
+  export EDITOR='emacsclient -n -c'
+elif [[ "$INSIDE_EMACS" = 'vterm' || "$INSIDE_EMACS" = *eat ]]; then
   #source $HOME/.local/SHELL_SETTINGS/my-prompt.sh
   #source $HOME/.local/SHELL_SETTINGS/my-shell-settings.sh
   export EDITOR='vterm_cmd find-file'
@@ -64,9 +67,7 @@ alias code_i='vs -n --user-data-dir $HOME/.config/Code-i /cm/vobs/ifps1/IFPS /au
 alias code_t='vs -n --user-data-dir $HOME/.config/Code-t /cm/vobs/tact1/TACT /auto/local_build/dhws149/disk1/cm/LATEST/ELD /auto/local_build/dhws149/disk1/cm/LATEST/TOOL'
 export GNAT8=/cm/build9/cm/ot/TOOL/G!31.L8/gnatpro-24.0w-20230604-L8
 export PATH=${GNAT8}/bin:$PATH
-
-# Codon compiler path (added by install script)
-export PATH=$HOME/.codon/bin:$PATH
+export PATH=/auto/home/ekhassan/bin/eurocontrol/BUILD_MASTER:$PATH
 ##################################### NIM #######################################
 export PATH=$HOME/.nimble/bin:$PATH
 ################################### UV ##########################################
@@ -82,4 +83,46 @@ alias cbd=cd_pattern
 export PATH="$PATH:/auto/local_build/dhws149/disk1/DOWNLOADS/node-v22.16.0-linux-x64/bin"
 
 ################################# OLLAMA ######################################
-pgrep -x ollama >/dev/null || ollama serve &>/dev/null &
+#pgrep -x ollama >/dev/null || ollama serve &>/dev/null &
+############################## AICOE #############################################
+export ANTHROPIC_FOUNDRY_BASE_URL=https://nmlab-ai-gate.azure-api.net/ai/anthropic
+export CLAUDE_CODE_USE_FOUNDRY="1"
+######################################################################################
+#export PATH="/auto/local_build/dhws149/disk1/DOWNLOADS/GITHUB-REPOS/mojo:$PATH"
+#export PATH="/auto/local_build/dhws149/disk1/DOWNLOADS/uv/python/cpython-3.14.3-linux-x86_64-gnu/bin:$PATH"
+
+# Codon compiler path (added by install script)
+# Codon compiler path (added by install script)
+#export PATH=$HOME/.codon/bin:$PATH
+#export PATH=/auto/home/ekhassan/.codon/bin:$PATH
+###########################################################
+# Aliases are only expanded when zsh first reads a command line, and only for the first word.
+# Inside the function, "$@" is just a list of words, so zsh never looks them up as aliases.
+# The fix is to run the arguments through eval, which makes zsh read them again as a command line,
+# alias expansion included:
+run-in-emacs() {
+  emacs --insert =(eval "$*") --eval '(progn
+    (require (quote ansi-color))
+    (fundamental-mode)
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (goto-char (point-min)))'
+}
+#########################################################
+# export PERL5LIB=$HOME/bin/eurocontrol/pm:$PERL5LIB
+export NM_REPOSITORY_ALTERNATE='/auto/local_build/dhws143/disk1/pphilbey/nmhist/NM'
+#########################################################
+# removes user path before launching a command (useful for builds !!!)
+# usage: e.g. "without_user_path Tbuild ..."
+without_user_path() {
+    typeset newpath dir
+    typeset oldIFS=${IFS}
+    IFS=:
+    for dir in ${PATH}; do
+        [[ "${dir}" == *"/${USER}/"* ]] && continue
+        [[ -n "${newpath}" ]] && newpath="${newpath}:"
+        newpath="${newpath}${dir}"
+    done
+    IFS=${oldIFS}
+    PATH=${newpath} "$@"
+}
+alias pbeta='eval $(~pphilbey/bin/install_beta_test)'

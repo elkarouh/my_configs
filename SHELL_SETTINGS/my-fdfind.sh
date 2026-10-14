@@ -105,7 +105,7 @@ htop() {
         print -z "kill -9 "${pids[@]}""
     fi
 }
-hkill() {
+hkill_ORIG() {
     local pid
     pid=$(show_processes | fzf -e -m | awk '{print $2}')
     pids=($pid)
@@ -114,6 +114,22 @@ hkill() {
         print -z "kill -9 "${pids[@]}""
     fi
 }
+
+hkill () {
+    local selected pids
+    selected=$(ps -u "$USER" -o user,pid,lstart,etimes,cmd 2>/dev/null | \
+               awk 'NR==1 || NR>1 {print}' | \
+               sort -k4,4n | \
+               awk '{$4=""; print}' | \
+               fzf -e -m --header="Select processes to kill (Top = Most Recent)" | \
+               awk '{print $2}')
+
+    if [[ -n "$selected" ]]; then
+        pids=(${(f)selected})
+        print -z "kill -9 ${pids[@]}"
+    fi
+}
+
 hkill1() {
     local pid
     pid=$(lsof | fzf -e -m | awk '{print $2}')
@@ -274,6 +290,7 @@ fi
 hvnc () {
   print -z $(echo -e "\
 vncviewer dhws149:10
+wssh dhdevd25 # REDHAT 10
 vncviewer ptacprd:90 # 28.0 install
 vncviewer dhbldd25:7 # build server
 vncviewer dhws028:22 # alv
@@ -344,25 +361,9 @@ hvob1 () {
 defaultBind="enter:accept,Ctrl-v:execute(vi -R {} > /dev/tty)"
 defaultHeader="enter → Confirm choice (use tab for multiple select), Ctrl-v -> view, Ctrl-q -> Quit"
 
-f6 () {
-  test ${#1} = 0 && echo "Need one argument" && return 1
-  res=$(echo $(lolcate --db TACT_CLOSURE $1 --type all_vob | fzf -e -m --bind "$defaultBind" --header "$defaultHeader" --preview "bat --color=always --style=numbers --line-range=:500 {}" --preview-window down,80%))
-  if [ "$res" ]; then
-    echo "Ccheckout -force $res" | write2prompt
-  fi
-}
-
-f6_exact () { # we know the exact filename
-  test ${#1} = 0 && echo "Need one argument" && return 1
-  res=$(lolcate --db TACT_CLOSURE $1 --type all_vob)
-  if [ "$res" ]; then
-    Ccheckout -force $res
-  fi
-}
-
 f7 () {
   test ${#1} = 0 && echo "Need one argument" && return 1
-  res=$(echo $(lolcate --db TACT_CLOSURE $1 --type all_vob | fzf -e -m --bind "$defaultBind" --header "$defaultHeader" --preview "bat --color=always --style=numbers --line-range=:500 {}" --preview-window down,80%))
+  res=$(where_ada $1 | fzf -e -m --bind "$defaultBind" --header "$defaultHeader" --preview "bat --color=always --style=numbers --line-range=:500 {}" --preview-window down,80%)
   if [ "$res" ]; then
     echo "emacs $res" | write2prompt
   fi

@@ -5,9 +5,11 @@ alias nuitka='nuitka --standalone --onefile'
 alias rm,,="echo -e 'If you want to use rm really, then use \"\\\\rm\" instead.'; false"
 alias mtop='~mea/bin/htop'
 alias docker=podman
+alias Hgrep='Pgrep -closure TACT'
 ###################### clipboard #######################
 alias hpaste='xsel --clipboard' # pipe into hclip to paste to the clipboard
 ###############################################################################
+alias my_show_processes='ps -eo user,pid,comm,lstart --sort=-lstart'
 alias termaid='python -m termaid'
 alias wssh='wezterm ssh'
 #alias hclock='TZ=Europe/Brussels xclock -d -strftime "%H:%M:%S"'
@@ -24,6 +26,7 @@ alias gv='get_view'
 alias ada-parse='parse -quiet -file'
 alias less='less -r' # PRESERVE THE COLORS !!!!
 ##alias -g cdd,='cd;cd "$(fd -td --hidden | fzf)"'
+alias gho='ghostty'
 alias v,='if res=$(fd -H -tf -tl . | fzf -e -m);then v $res;fi'
 alias xa='if res=$(alias | cut -d= -f1 | fzf -e -m);then echo $res | write2prompt;fi'
 alias typora,='if res=$(fd -e md -tf -tl | fzf -m);then typora $res;fi'
@@ -56,11 +59,13 @@ alias en='emacs -nw'
 alias eq='emacs -Q'
 alias kille='kill -9 $(pidof emacs)'
 ##############
-alias v='hx' # helix editor
-alias ev='eh --eval="(hek-toggle-vterm)" &'
-alias tem='eh -nw --eval="(hek-toggle-vterm)"' # Terminal Emacs
-alias vz='vi ~/.zshrc'
-alias vk='vi ~/.kshrc'
+# alias v='hx' # helix editor
+alias v='nem' # nem editor (nano with emacs bindings)
+alias evm="eh --eval '(add-hook '\''emacs-startup-hook #'\''vterm)'"
+alias ev="eh -nw --eval '(add-hook '\''emacs-startup-hook #'\''ghostel)'"
+alias temv="eh --eval '(add-hook '\''emacs-startup-hook #'\''vterm)' -nw"
+alias vz='v ~/.zshrc'
+alias vk='v ~/.kshrc'
 #alias evm='em -fs -f vterm' # same as ev but starts maximized
 alias hemacs,='if res=$(fd -tf -tl | fzf -m);then cmd="emacs $res";print -s $cmd; $cmd &;fi'
 #alias e='HOME=~ekhassan emacs -n --load ~ekhassan/EMACS_STUFF/themes/material-theme.el'
@@ -181,12 +186,9 @@ alias cdL='cd $HOME/.local'
 alias cdh='cd $HOME/LOCAL_HARD_DISK/local'
 alias cdd='cd $HOME/Downloads'
 alias cdo='cd $HOME/Documents'
-alias cde='cd ${PWD%_?}_e' # cd to the ELD directory
-alias cdt='cd ${PWD%_?}_t' # cd to the TACT directory
-alias cdi='cd ${PWD%_?}_i' # cd to the IFPS directory
 alias cdnas='cd /cfmu/nasdata'
 alias ssd='cd LOCAL_SSD'
-alias ssde='cd LOCAL_SSD/ETFMS'
+alias cdB='cd LOCAL_SSD/CFMU'
 alias db='cd LOCAL_SSD/GEO_ENV_DB'
 alias z,=zi # zoxide interactive !!!
 alias cd,='cd $(fd -uu -td -d3 | fzf -e --preview "tree -C {} | head -200")'
@@ -199,7 +201,10 @@ alias Cd='cd /home/$(whoami)/cm/${CLEARCASE_ROOT##*/}; pwd'
 function .. {
   cd $(printf '../%.0s' $(seq 1 $1))
 }
-alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
+# mkcd is defined as a function in my-functions.sh — keep that one.
+# (Defining it as both an alias and a function trips zsh's parser, since
+# aliases are expanded when functions are read.)
+# alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
 
 #####################################################################################################
 # #use bm to bookmark current directory, use to foo to go to a directory containing 'foo'
@@ -265,7 +270,7 @@ alias llt='lsd -FArtl --date relative --tree' # same as lt but with more details
 
 alias l2='eza --group-directories-first -a -l -s newest --time-style relative --icons'
 alias L='eza -1labT --time-style relative -L2' # limit recursion to 2
-#alias l='eza --group-directories-first -a -l -s changed --header --git'
+#alias l='eza --group-directories-first -a -l -s changed --header --git --time-style relative'
 ###########################
 
 #lsd --directory-only (.*|*)(^/)   # Only list files
@@ -366,7 +371,7 @@ function h {
 alias pysv='source ~ekhassan/bin/pysv'
 #######################################
 # c () { echo "$*" | bc -l; }
-alias c=zi
+#alias c=zi
 ################## Easily search running processes ####################
 #alias 'ps?'='ps ax | rg '
 #################################################################
@@ -388,3 +393,37 @@ function emacs-web {
   latest_html=$(ls -t *.html | head -n 1)
   emacs --eval "(eww-open-file \"$latest_html\")"
 }
+#########################################################
+alias jimmy="$HOME/jimmy-env/bin/jimmy"
+####################### https://github.com/stianhoiland/cd ########################################
+export MY_FUZZY_PICKER=fzf
+ESC=$'\x1b'
+YELLOW="$ESC[33m"
+RESET="$ESC[0m"
+# sed -r: colorize last path component
+COLORIZE="s,([^/]+/?)$,$YELLOW\1$RESET,"
+# sed: strip ansi color sequences
+DECOLORIZE="s,$ESC[[0-9;]*[mK],,g"
+CDHISTFILE="$HOME/.cd_history"
+cd() {
+  command cd "$@" && printf '%s\n' "$PWD" >> "$CDHISTFILE"
+}
+c() {
+  dir=$(
+    tac "$CDHISTFILE" |
+    awk '$0 != ENVIRON["PWD"] && !seen[$0]++' |
+    sed -r "$COLORIZE" |
+    fzf --ansi |
+    sed "$DECOLORIZE"
+  )
+  [ "$dir" ] && cd "$dir"
+}
+alias hpull='git pull --recurse-submodules'
+########################################################################
+alias gg='git1'
+alias swg='switch-gitconfig'
+alias Hreport='Tcheck_tact -focus changes'
+alias cdcm='cd /auto/local_build/dhws149/disk1/ekhassan/cm/'
+#alias tpyc='python3.13 -m tpyc -x
+alias tpy='/auto/home/ekhassan/LOCAL_SSD/DOWNLOADS/uv/python/cpython-3.13.7-linux-x86_64-gnu/bin/tpy'
+alias tpyc='/auto/home/ekhassan/LOCAL_SSD/DOWNLOADS/uv/python/cpython-3.13.7-linux-x86_64-gnu/bin/tpyc'

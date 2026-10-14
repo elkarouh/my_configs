@@ -4,7 +4,8 @@ cccc() { [ $# == 0 ] && printf "\e[0m" || printf "$1" | sed 's/\(.\)/\1;/g;s/\([
 my_cecho() { echo -e "$(cccc $1)${2}\e[0m"; }
 ######################################################################
 get_machine() {
-  if [[ $HOSTNAME == $(whohas $LOGNAME) ]];then
+  #if [[ $HOSTNAME == $(whohas $LOGNAME) ]];then
+  if [[ $HOSTNAME == dhws149 ]];then
     echo "$USER@$HOSTNAME: "
   else
     my_cecho fs "$USER@$HOSTNAME: "
@@ -22,27 +23,27 @@ get_time() {
   my_cecho sWr "[$time]"
 }
 get_view() {
-  if [[ -d $DATA_FILES ]];then
-    TACTDEV="TACT_DEV-> "
-  fi
-  if [[ -d ${VIEWSTORE} ]]; then
-    VIEW=$(basename $VIEWSTORE)
-    VIEW=${VIEW#$USER.}
-    VIEW="${TACTDEV}${VIEW}"
-    BUILD_TYPE="${CM_ENV_ID:5:2}"
-    echo -e $(cccc sKw)${BUILD_TYPE}$(cccc) $(cccc sWg) "[${VIEW#$USER}]" $(cccc)
-  else
-    #if command -v tactdev &>/dev/null; then
-    if [ ${CM_SYSTEM} != TOOL ]; then
-      # we are in a context
-      my_cecho sBw "[${CFMU_BUILD_TYPE} ${CM_SYSTEM} context $(echo $CONTEXT_CM_BASELINE | cut -d. -f 6)]"
+    if [[ -d $DATA_FILES ]];then
+        TACTDEV="TACT_DEV-> "
     fi
-  fi
+    if [[ -d ${VIEWSTORE} ]]; then
+        _src=${VIEWSTORE}
+    elif [[ -n ${CMA_WORKSPACE} ]]; then
+        _src=${CMA_WORKSPACE}
+    fi
+
+    if [[ -n ${_src} ]]; then
+        _base=$(basename ${_src})
+        VIEW="${TACTDEV}${_base#$USER.}"
+        echo -e $(cccc sKw)${CM_ENV_ID:5:2}$(cccc) $(cccc sWg) "[${VIEW#$USER}]" $(cccc)
+    elif [[ ${CM_SYSTEM} != TOOL ]]; then
+        my_cecho sBw "[${CFMU_BUILD_TYPE} ${CM_SYSTEM} context $(echo $CONTEXT_CM_BASELINE | cut -d. -f 6)]"
+    fi
 }
 
 get_proxy() {
-  if [[ -n $https_proxy ]]; then
-    my_cecho SBw PROXY
+  if [[ "$https_proxy" == *"$USER"* ]]; then
+    my_cecho SBw 'proxy'
   fi
 }
 

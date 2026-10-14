@@ -1,15 +1,17 @@
 #!/usr/bin/env ksh
 export OLD_HOME=$HOME
 export HOME=/home/ekhassan
+#MACHINE=$(whohas $)
+MACHINE=dhws149
 export LD_LIBRARY_PATH=/home/ekhassan/opt/virtualgl/lib64:/home/ekhassan/opt/virtualgl/lib:$LD_LIBRARY_PATH
-alias em='DISPLAY=dhws149:1 emacs -l /home/ekhassan/e.el --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias e='DISPLAY=dhws149:1 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias em10='DISPLAY=dhws149:10 emacs -l /home/ekhassan/e.el --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias e10='DISPLAY=dhws149:10 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias em99='DISPLAY=dhws149:99 emacs -l /home/ekhassan/e.el --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias e99='DISPLAY=dhws149:99 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias em63='DISPLAY=dhws149:63 emacs -l /home/ekhassan/e.el --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
-alias e63='DISPLAY=dhws149:63 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (vterm) (vterm-send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias em='DISPLAY=${MACHINE}:1 emacs -l /home/ekhassan/e.el --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias e='DISPLAY=${MACHINE}:1 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias em10='DISPLAY=${MACHINE}:10 emacs -l /home/ekhassan/e.el --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias e10='DISPLAY=${MACHINE}:10 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias em99='DISPLAY=${MACHINE}:99 emacs -l /home/ekhassan/e.el --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias e99='DISPLAY=${MACHINE}:99 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias em63='DISPLAY=${MACHINE}:63 emacs -l /home/ekhassan/e.el --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
+alias e63='DISPLAY=${MACHINE}:63 emacs -l /home/ekhassan/e.el -l /home/ekhassan/EMACS_STUFF/themes/material-light-theme --eval="(progn (ghostel) (ghostel--send-string \"source ~ekhassan/a.sh\n\"))" &'
 ################
 source $HOME/.local/SHELL_SETTINGS/my-prompt.sh
 #source $HOME/.local/my-aliases.sh

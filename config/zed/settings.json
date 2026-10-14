@@ -1,181 +1,68 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run the command palette (ctrl-shift-p)
 {
   "agent": {
     "default_model": {
-      "provider": "ollama",
-      "model": "qwen3-coder:30b",
       "enable_thinking": false,
+      "model": "qwen3-coder:30b",
+      "provider": "ollama"
     },
+    "dock": "right",
     "favorite_models": [
       {
-        "provider": "ollama",
-        "model": "qwen3-coder:30b",
         "enable_thinking": false,
-      },
+        "model": "qwen3-coder:30b",
+        "provider": "ollama"
+      }
     ],
-    "model_parameters": [],
+    "message_editor_min_lines": 2,
+    "model_parameters": []
   },
   "agent_servers": {
-    "github-copilot-cli": {
-      "type": "registry"
-    },
     "claude-acp": {
       "type": "registry"
     },
-    "qwen-code": {
-      "type": "registry",
+    "codex-acp": {
+      "type": "registry"
     },
+    "gemini": {
+      "type": "registry"
+    },
+    "github-copilot-cli": {
+      "type": "registry"
+    },
+    "qwen-code": {
+      "type": "registry"
+    }
   },
-  //"base_keymap": "VSCode",
+  "always_treat_brackets_as_autoclosed": true,
+  "auto_install_extensions": {
+    "fleet-themes": true,
+    "html": true,
+    "lua": true,
+    "make": true,
+    "ruby": true,
+    "toml": true
+  },
   "base_keymap": "Emacs",
-  "title_bar": {
-    "show_user_menu": false,
-    "show_onboarding_banner": false,
-    "show_branch_icon": true,
-    "show_project_items": false,
-    "show_branch_name": true,
-  },
-  "max_tabs": 8,
-  "search": {
-    "button": true,
-  },
-  "tab_bar": {
-    "show": true,
-  },
-  "toolbar": {
-    "quick_actions": false,
-  },
-  "git_panel": {
-    "dock": "left",
-    "collapse_untracked_diff": true,
-    "fallback_branch_name": "master",
-    "button": false,
-  },
-  "notification_panel": {
-    "dock": "right",
+  "buffer_font_family": "Fira Code",
+  "buffer_font_size": 17.5,
+  "buffer_line_height": "comfortable",
+  "centered_layout": {
+    "left_padding": 0.15,
+    "right_padding": 0.15
   },
   "collaboration_panel": {
     "button": false,
+    "dock": "left"
   },
-  "outline_panel": {
-    "indent_size": 35,
-    "button": false,
-  },
-  "project_panel": {
-    "default_width": 350,
-    "hide_root": true,
-    "auto_fold_dirs": false,
-    "dock": "right",
-    "starts_open": false,
-    "sticky_scroll": false,
-    "indent_guides": {
-      "show": "never",
-    },
-  },
-  "indent_guides": {
-    "enabled": true,
-    "coloring": "fixed",
-  },
-  "gutter": {
-    "min_line_number_digits": 0,
-    "folds": true,
-    "runnables": false,
-  },
-  "tabs": {
-    "git_status": true,
-    "file_icons": true,
-    "show_diagnostics": "errors",
-  },
-  "language_models": {
-    "ollama": {
-      "api_url": "http://localhost:11434",
-      "available_models": [
-        {
-          "name": "qwen3-coder:30b",
-          "display_name": "Qwen3 Coder 30B",
-          "max_tokens": 262144,
-        },
-      ],
-    },
-  },
-    "file_types": {
-      "Nim": ["nim", "hpy"]
+  "context_servers": {
+    "lean-ctx": {
+      "args": [],
+      "command": "/auto/home/ekhassan/.local/bin/lean-ctx",
+      "env": {}
     }
-  ,
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false,
   },
-  "inlay_hints": {
-    "enabled": false,
-  },
-  "centered_layout": {
-    "left_padding": 0.15,
-    "right_padding": 0.15,
-  },
-  "git": {
-    "inline_blame": {
-      "enabled": true,
-      "delay_ms": 300,
-      "min_column": 80,
-    },
-  },
-  "scrollbar": {
-    "show": "never",
-  },
-  "vim_mode": false,
   "current_line_highlight": "none",
-  "multi_cursor_modifier": "cmd_or_ctrl",
   "cursor_blink": false,
-  "seed_search_query_from_cursor": "never",
-  "buffer_font_family": "Fira Code",
-  "ui_font_family": "Droid Sans Mono for Powerline",
-  "ui_font_size": 14.5,
-  "buffer_font_size": 17.5,
-  "buffer_line_height": "comfortable",
-  "relative_line_numbers": "disabled",
-  "theme": {
-    "mode": "light",
-    "light": "One Light",
-    "dark": "Ayu Dark",
-  },
-  "minimap": {
-    "show": "never",
-  },
-  "terminal": {
-    "font_family": "Fira Code Symbol",
-    "font_size": 17,
-    //"line_height": {"custom": 1.6, },
-    "scrollbar": { "show": "always" },
-    "toolbar": { "breadcrumbs": true },
-    "dock": "bottom",
-    "blinking": "on",
-    "copy_on_select": true,
-    "default_height": 500,
-    "env": {
-      "EDITOR": "zed --wait",
-    },
-    "detect_venv": {
-      "on": {
-        "directories": [".venv", "venv"],
-        "activate_script": "default",
-      },
-    },
-  },
-  "auto_install_extensions": {
-    "html": true,
-    "toml": true,
-    "lua": true,
-    "ruby": true,
-    "make": true,
-    "fleet-themes": true,
-  },
   "file_scan_exclusions": [
     "**/.git",
     "**/.svn",
@@ -196,23 +83,152 @@
     "**/.tap",
     "**/.nyc_output",
     "**/report",
-    "**/node_modules",
+    "**/node_modules"
   ],
-  "remove_trailing_whitespace_on_save": true,
+  "file_types": {
+    "Nim": [
+      "nim",
+      "hpy"
+    ]
+  },
   "format_on_save": "off",
-  "always_treat_brackets_as_autoclosed": true,
-  "restore_on_startup": "last_workspace",
+  "git": {
+    "inline_blame": {
+      "delay_ms": 300,
+      "enabled": true,
+      "min_column": 80
+    }
+  },
+  "git_panel": {
+    "button": false,
+    "collapse_untracked_diff": true,
+    "dock": "left",
+    "fallback_branch_name": "master"
+  },
+  "gutter": {
+    "folds": true,
+    "min_line_number_digits": 0,
+    "runnables": false
+  },
+  "indent_guides": {
+    "coloring": "fixed",
+    "enabled": true
+  },
+  "inlay_hints": {
+    "enabled": false
+  },
+  "language_models": {
+    "ollama": {
+      "api_url": "http://localhost:11434",
+      "available_models": [
+        {
+          "display_name": "Qwen3 Coder 30B",
+          "max_tokens": 262144,
+          "name": "qwen3-coder:30b"
+        }
+      ]
+    }
+  },
   "lsp": {
-    // "ada-language-server": {
-    //   "binary": {
-    //     "path": "ada_language_server",
-    //   },
-    // },
     "ruff": {
       "binary": {
-        "path": "ruff",
-        "arguments": ["check", "--stdin-filename", "${INPUT_PATH}"],
-      },
-    },
+        "arguments": [
+          "check",
+          "--stdin-filename",
+          "${INPUT_PATH}"
+        ],
+        "path": "ruff"
+      }
+    }
   },
+  "max_tabs": 8,
+  "minimap": {
+    "show": "never"
+  },
+  "multi_cursor_modifier": "cmd_or_ctrl",
+  "notification_panel": {
+    "dock": "right"
+  },
+  "outline_panel": {
+    "button": false,
+    "dock": "left",
+    "indent_size": 35
+  },
+  "project_panel": {
+    "auto_fold_dirs": false,
+    "default_width": 350,
+    "dock": "right",
+    "hide_root": true,
+    "indent_guides": {
+      "show": "never"
+    },
+    "starts_open": false,
+    "sticky_scroll": false
+  },
+  "relative_line_numbers": "disabled",
+  "remove_trailing_whitespace_on_save": true,
+  "restore_on_startup": "last_workspace",
+  "scrollbar": {
+    "show": "never"
+  },
+  "search": {
+    "button": true
+  },
+  "seed_search_query_from_cursor": "never",
+  "tab_bar": {
+    "show": true
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "show_diagnostics": "errors"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "terminal": {
+    "blinking": "on",
+    "copy_on_select": true,
+    "default_height": 500,
+    "detect_venv": {
+      "on": {
+        "activate_script": "default",
+        "directories": [
+          ".venv",
+          "venv"
+        ]
+      }
+    },
+    "dock": "bottom",
+    "env": {
+      "EDITOR": "zed --wait"
+    },
+    "font_family": "Fira Code Symbol",
+    "font_size": 17,
+    "scrollbar": {
+      "show": "always"
+    },
+    "toolbar": {
+      "breadcrumbs": true
+    }
+  },
+  "theme": {
+    "dark": "Ayu Dark",
+    "light": "One Light",
+    "mode": "light"
+  },
+  "title_bar": {
+    "show_branch_icon": true,
+    "show_branch_name": true,
+    "show_onboarding_banner": false,
+    "show_project_items": false,
+    "show_user_menu": false
+  },
+  "toolbar": {
+    "quick_actions": false
+  },
+  "ui_font_family": "Droid Sans Mono for Powerline",
+  "ui_font_size": 14.5,
+  "vim_mode": false
 }

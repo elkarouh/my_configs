@@ -1,9 +1,4 @@
 [[plugin.deps]]
-use = "yazi-rs/plugins:hide-preview"
-rev = "ec97f88"
-hash = "b25c2acb08d9ca5ff5cf71ea764fed8d"
-
-[[plugin.deps]]
 use = "yazi-rs/plugins:smart-filter"
 rev = "ec97f88"
 hash = "ea24edab4a62c94dbd205adfb6f2c08d"
@@ -82,6 +77,11 @@ hash = "fc8d977f168df8ac6db8b5c1167ec777"
 use = "AnirudhG07/rich-preview"
 rev = "7d616ad"
 hash = "d64feec9761392cbc250d199ab4b8a3a"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:vcs-files"
+rev = "c591a36"
+hash = "853240b2454c93a93fd03fc9fd7e06e8"
 
 [[flavor.deps]]
 use = "dangooddd/kanagawa"

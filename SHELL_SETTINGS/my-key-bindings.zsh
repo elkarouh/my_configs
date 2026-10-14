@@ -52,7 +52,8 @@ source $HOME/.local/SHELL_SETTINGS/fzf_completion_widget.sh
 #    cd "$(command lf -print-last-dir "$@")"
 #}
 ########################################## yazi navigator #####################################################
-bindkey -s '^b' 'yy\n'  #  CALL yazi with ctrl-b (b for browser !!!)
+#bindkey -s '^b' 'el\n'  #  CALL elio | yazi with ctrl-b (b for browser !!!)
+bindkey -s '^b' 'yy\n'  #  CALL elio | yazi with ctrl-b (b for browser !!!)
 function yy() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
   yazi "$@" --cwd-file="$tmp"
@@ -61,7 +62,15 @@ function yy() {
   fi
   rm -f -- "$tmp"
 }
-
+# elio: cd into the directory elio was in when you quit
+el() {
+  typeset tmp cwd
+  tmp=$(mktemp /tmp/elio-cwd.XXXXXX) || return
+  EDITOR=sb VISUAL=sb command elio --cwd-file "$tmp" "$@"
+  cwd=$(cat -- "$tmp")
+  rm -f -- "$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && cd -- "$cwd"
+}
 ################################
 copy-line-to-clipboard() {
   echo -n $BUFFER | xclip -selection clipboard

@@ -1,5 +1,52 @@
 alias print_funcs='print -l ${(k)functions} | rg '"'"'^[^._-]'"'"' '
-######################################################################
+
+function pause_until_key_pressed {
+  #python -c "raw_input('Press enter to continue...')" # the only portable way for all shells !!!
+  python3 -c "input('Press enter to continue...')" # the only portable way for all shells !!!
+  cecho sWr "\ncontinuing ..."
+  echo
+}
+# cd backwards to named directoy in current path
+dc() {
+    local query="${1:-}"
+    local dir="$PWD"
+    local -a candidates=()
+    local selected
+    local name
+
+    while [[ "$dir" != "/" && "$dir" != "/auto/home" && "$dir" != "/auto" ]]; do
+        dir="${dir%/*}"
+        [[ -z "$dir" ]] && dir="/"
+
+        case "$dir" in
+            /|/auto|/auto/home) break ;;
+        esac
+
+        name="${dir##*/}"
+        candidates+=("$(printf '%-20s\x1f%s' "$name" "$dir")")
+    done
+
+    ((${#candidates[@]})) || return 1
+
+    selected=$(
+        printf '%s\n' "${candidates[@]}" |
+            fzf \
+                --height=40% \
+                --reverse \
+                --query="$query" \
+                --delimiter=$'\x1f' \
+                --nth=1 \
+                --prompt='cd> ' \
+                --header='Parent directories' \
+                --select-1 \
+                --exit-0 \
+                --no-multi
+    ) || return
+
+    cd -- "${selected#*$'\x1f'}"
+}
+
+##################################################################
 # TRICK avoid 'exit' in all cases; "kill -INT $$" terminates the script safely in either case. !!!
 ##########################################################
 gitmeld() {
@@ -16,14 +63,11 @@ run_in_emacs_shell() {
                   (shell)
                   (comint-send-string (current-buffer) \"$cmd\n\"))"
 }
+alias re='run_in_emacs_shell'
 
 pytr() {
   pwd | python3 -c "import re; print(re.sub('$1','$2',open(0).read()))" | tee /dev/tty | hclip
   #pwd | pyline -i re "re.sub('$1','$2',line)" | tee /dev/tty | hclip
-}
-
-show_builds() {
-  fdl -L --max-depth 1 -td $1 /cm/ot/TACT/
 }
 
 pairwise_reverse() {
@@ -165,29 +209,6 @@ function my_aliases() {
   alias | fzf -e
 }
 
-
-function see_Tlogs() {
-  function find_Tlogs {
-    cd /cm/ot/TACT
-    USER=${1:-EKHASSAN} # DEFAULT PARAMETER IS EKHASSAN
-    USER=$(python -c "print ('${USER}'.upper())")
-    fd -td -L -d1 -0 -p ${USER} | xargs -0 ls -td | while read dir; do
-      fd -e log Tlog-in $dir
-    done
-  }
-  function find_new_failing_tests {
-    file=$1
-    echo $file
-    #start_line_number=$(echo "a=\"$(rg -n 'New tests failing' $file)\".split(':');print(a[0])" | python)
-    start_line_number=$(python -c "a=\"$(rg -n 'New tests failing' $file)\".split(':');print(a[0])")
-    echo "start linenumber=$start_line_number"
-    end_line_number=$(rg -n "Tests still failing" $file | cut -d ':' -f 1)
-    awk "NF && NR >= $start_line_number && NR < $end_line_number" $file | rg '\w*\.el\b'
-    #echo "emacs +$start_line_number \"$file\"" | xclip -selection clipboard
-    echo "emacs +$start_line_number \"$file\"" | write2prompt
-  }
-  find_new_failing_tests "/cm/ot/TACT/$(find_Tlogs "$1" | fzf -e)"
-}
 function tailc {
   # tail with colors
   tail $@ | ccze -A
@@ -202,7 +223,7 @@ function my_functions() {
 
 
 eh() {
-  hemacs "$@" --load ~ekhassan/e.el
+  hemacs31 "$@" --load ~ekhassan/e.el
 }
 
 # returns file modification age in seconds
@@ -265,10 +286,15 @@ fuzzy-search-executables() {
 # printf "\nNo commit message provided"
 # fi
 ######################################## git branches #####################################
-br() {
-  b="$(git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short) %(contents:subject) (%(committerdate:relative))' | fzf --no-sort)" && git checkout "${b%% *}"
+br () {
+    typeset b
+    b=$(git for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ \
+          --format='%(refname:short)%09%(contents:subject) (%(committerdate:relative))' \
+        | grep -v '/HEAD ' \
+        | fzf --no-sort --height=40% --reverse) || return
+    b=${b%%$'\t'*}
+    git checkout "${b#origin/}"
 }
-
 ############################################## COLORED ECHO ############################################################
 # https://github.com/ppo/bash-colors/blob/master/bash-colors.sh
 #c() { [ $# == 0 ] && printf "\e[0m" || printf "$1" | sed 's/\(.\)/\1;/g;s/\([SDIUFNHT]\)/2\1/g;s/\([KRGYBMCW]\)/3\1/g;s/\([krgybmcw]\)/4\1/g;y/SDIUFNHTsdiufnhtKRGYBMCWkrgybmcw/12345789123457890123456701234567/;s/^\(.*\);$/\\e[\1m/g'; }
@@ -539,7 +565,22 @@ vterm_debug() {
 }
 #################################################################
 PS1='$(get_prompt)'
-if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+if [[ "${INSIDE_EMACS%%,*}" = 'ghostel' ]]; then
+  # ksh-compatibility mode skips .zshenv, so source integration manually.
+  # ghostel.zsh uses zsh-specific syntax, so temporarily switch emulation.
+  if [[ -r "$EMACS_GHOSTEL_PATH/etc/shell/ghostel.zsh" ]]; then
+    emulate zsh -c "source '$EMACS_GHOSTEL_PATH/etc/shell/ghostel.zsh'"
+  fi
+  ghostel_open_file()       { ghostel_cmd find-file "$(realpath "${@:-.}")"; }
+  ghostel_open_file_other() { ghostel_cmd find-file-other-window "$(realpath "${@:-.}")"; }
+  # Open dired in another window
+  dow() { ghostel_cmd dired-other-window "$@"; }
+  alias o='ghostel_open_file'
+  alias oo='ghostel_open_file_other'
+  alias clear='ghostel_cmd ghostel-clear'
+  alias cls='ghostel_cmd ghostel-clear'
+  EDITOR='ghostel_open_file'
+elif [[ "$INSIDE_EMACS" = 'vterm' ]]; then
   PS1="${PS1}$(vterm_prompt_end)"
   #
   alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
@@ -556,6 +597,9 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
   alias vdebug0='vterm_cmd_one_arg run-gud-from-vterm'
   alias vdebug='vterm_debug'
   EDITOR='vterm_cmd find-file'
+elif [[ "$TERM_PROGRAM" = 'ghostty' ]]; then
+  alias o='open_file_below'
+  EDITOR='ghostel_cmd find-file'
 elif [[ "$TERM_PROGRAM" = 'vscode' ]]; then
   alias o='vs'
   EDITOR=code
@@ -665,3 +709,47 @@ spawn() {
 ###################### BOOKMARK system ###########################################
 source ~ekhassan/bin/shelf.ksh
 ##################################################################################
+############################################## PYTHON VIEWS ###############################################
+choose-python-view() {
+  view=$(lpv | fzfmenu)
+  echo "$view"
+}
+
+lpv() { # list python VIEWS
+  fd -tl -d 1 . ~/.virtualenvs/ -x echo {/}
+}
+
+spv() { # set python view (virtual env)
+  view_dir=$(choose-python-view)
+  if [ -n $view_dir ];then
+    cd ~/.virtualenvs/
+    cd $(readlink ${view_dir})
+    source bin/activate
+    alias pexit='deactivate'
+    echo "USE 'pexit' or 'deactivate' to exit"
+  fi
+}
+
+mpv() { # make python view (virtual env)
+  view_name=$1
+  version=${2:-3.11}
+  if python${version} -m venv ${view_name} ; then
+    cur_dir=$(pwd)/${view_name}
+    cd ~/.virtualenvs/
+    ln -s $cur_dir "${view_name}-${version}"
+    cd $cur_dir
+    echo "PYTHON${version} VIEW '$view_name' CREATED"
+  fi
+}
+
+dpv() { # delete python VIEW
+    view_dir=$(choose-python-view)
+    cd ~/.virtualenvs
+    data_dir=$(readlink ${view_dir})
+    echo "DELETING SYMLINK ${view_dir}"
+    rm ${view_dir} # delete the symbolic link
+    # now delete the directory
+    echo "DELETING $data_dir"
+    rm -fr $data_dir
+    cd -
+    }

@@ -1,6 +1,5 @@
 # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 [headsup]
 disable_exec_warn = true
 [mgr]
@@ -24,20 +23,12 @@ max_height      = 900
 cache_dir       = ""
 image_filter    = "triangle"
 image_quality   = 75
-sixel_fraction  = 15
 ueberzug_scale  = 1
 ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	# { run = 'yazi_editor "$@"', desc = "$EDITOR", block = true, for = "unix" },
-	# { run = 'TERM=xterm-256color emacsclient -a "" -t "$@"', desc = "$EDITOR", block = true, for = "unix" },
-	#{ run = 'emacsclient -a "" -t "$@"', desc = "emacs in terminal", block = true, for = "unix" },
-      	# { run = 'emacsclient -n -c "$@"', desc = "emacs in GUI", block = true, for = "unix" },
-      	{ run = 'ec "$@"', desc = "emacs in GUI", block = true, for = "unix" },
-	#{ run = 'emacs "$@"', desc = "full emacs", block = true, for = "unix" },
-	#{ run = 'code "%*"',          orphan = true, for = "windows" },
-        #{ run = 'kitty ksh -c "nvim "$@""', orphan=true, desc = "$EDITOR", for = "unix" }
+        { run = 'nem %s', block = true, for = "unix" },
         ]
 open = [
 	{ run = 'xdg-open "$@"',                desc = "Open", for = "linux" },
@@ -58,12 +49,15 @@ play = [
 	{ run = 'mpv "%1"', orphan = true, for = "windows" },
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show media info", for = "unix" },
 ]
+diff = [
+	{ run = 'meld %s', orphan = true, desc = "meld", for = "unix" },
+]
 
 [open]
 rules = [
-	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	{ url = "*/", use = [ "edit", "open", "reveal" ] },
 
-	{ mime = "text/*",  use = [ "edit", "reveal" ] },
+	{ mime = "text/*",  use = [ "edit", "reveal", "diff" ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	{ mime = "video/*", use = [ "play", "reveal" ] },
 	{ mime = "audio/*", use = [ "play", "reveal" ] },
@@ -81,12 +75,10 @@ rules = [
 	{ mime = "application/rar",           use = [ "extract", "reveal" ] },
 	{ mime = "application/xz",              use = [ "extract", "reveal" ] },
 
-	{ mime = "*", use = [ "open", "reveal" ] },
+	{ url = "*", use = [ "open", "reveal" ] },
 ]
 
 [tasks]
-micro_workers    = 10
-macro_workers    = 25
 bizarre_retry    = 5
 image_alloc      = 536870912  # 512MB
 image_bound      = [ 0, 0 ]
@@ -97,18 +89,18 @@ suppress_preload = false
 previewers = [
 	##### { name = "*/", run = "hek-fzf-preview", sync = true },
 	########## { name = "*/", run = "folder", sync = true },
-	{ name = "*/",run  = 'piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'},
-    { name = "*.hpy", run  = 'piper -- rich -x nim -j --left --panel=none --guides --line-numbers --force-terminal "$1"'},    
-    { name = "*.md", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.py", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.adb", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.ads", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.toml", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.ksh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.sh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.txt", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.lua", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
-    { name = "*.pl", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+	{ url = "*/",run  = 'piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'},
+    { url = "*.hpy", run  = 'piper -- rich -x nim -j --left --panel=none --guides --line-numbers --force-terminal "$1"'},
+    { url = "*.md", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.py", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.adb", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.ads", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.toml", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.ksh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.sh", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.txt", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.lua", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
+    { url = "*.pl", run  = 'piper -- rich -j --left --panel none --line-numbers --force-terminal "$1"'},
 	# Code
 	{ mime = "text/*",                 run = "rich-preview" },
 	{ mime = "*/xml",                  run = "rich-preview" },
@@ -117,9 +109,9 @@ previewers = [
 	# JSON
 	{ mime = "application/json", run = "rich-preview" },
 	# CSV / RST / Jupyter
-	{ name = "*.csv",   run = "rich-preview" },
-	{ name = "*.rst",   run = "rich-preview" },
-	{ name = "*.ipynb", run = "rich-preview" },
+	{ url = "*.csv",   run = "rich-preview" },
+	{ url = "*.rst",   run = "rich-preview" },
+	{ url = "*.ipynb", run = "rich-preview" },
 	# Image
 	{ mime = "image/vnd.djvu", run = "noop" },
 	{ mime = "image/*",        run = "image" },
@@ -137,9 +129,9 @@ previewers = [
 	# { name = "*.docx", run = 'piper -- soffice --headless --cat "$1"'},
 
 	# Fallback
-	#{ name = "*", run = "file" },
-	#{ name = "*", run = "hek-fzf-preview" },
-	{ name = "*", run = 'piper -- hexyl --border=none --terminal-width=$w "$1"'},
+	#{ url = "*", run = "file" },
+	#{ url = "*", run = "hek-fzf-preview" },
+	{ url = "*", run = 'piper -- hexyl --border=none --terminal-width=$w "$1"'},
 ]
 
 [input]
@@ -207,6 +199,3 @@ open_offset = [ 0, 1, 50, 7 ]
 sort_by        = "none"
 sort_sensitive = false
 sort_reverse   = false
-
-[log]
-enabled = false

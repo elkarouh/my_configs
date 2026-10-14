@@ -50,7 +50,8 @@ export FZF_MARKER_PLACEHOLDER_KEY='\C-v'
 ##########################
 #export BUN_INSTALL="\/.bun"
 #export PATH="$BUN_INSTALL/bin:$PATH"
-export CODON_PYTHON=$HOME/LOCAL_SSD/Python-3.11.1/lib/libpython3.11.so
+export CODON_PYTHON=$HOME/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/libpython3.14.so
+export CODON_DIR=$HOME/.codon/bin
 ###################################################
 # export PYTHONBREAKPOINT="pudb.set_trace"
 export PYTHONPYCACHEPREFIX=$HOME/.cache/cpython/
@@ -75,18 +76,18 @@ export PATH=$PATH:$HOME/LOCAL_SSD/go/bin
 export BASH_IDE_LOG_LEVEL=error
 #LD_LIBRARY_PATH=~/Downloads/lib64:$LD_LIBRARY_PATH $@
 ################################## GTK4 ###################################################
-export GTK4_HOME=/auto/home/ekhassan/Downloads/gtk4-devel-3.94.0-1.el8.x86_64/gtk4
-# Compiler include paths
-export CFLAGS="-I$GTK4_HOME/include -I$GTK4_HOME/include/gtk-4.0 $CFLAGS"
-# Linker paths
-export LDFLAGS="-L$GTK4_HOME/lib64 -Wl,-rpath,$GTK4_HOME/lib64 $LDFLAGS"
-# pkg-config
-export PKG_CONFIG_PATH="$GTK4_HOME/lib64/pkgconfig:$GTK4_HOME/share/pkgconfig:$PKG_CONFIG_PATH"
-# Runtime library path (for running compiled binaries)
-export LD_LIBRARY_PATH="$GTK4_HOME/lib64:$LD_LIBRARY_PATH"
-################################## GRAPHENE ##############################
-export GRAPHENE_HOME=/auto/home/ekhassan/Downloads/graphene-devel-1.8.6-1.el8.x86_64/graphene
-export CFLAGS="-I$GRAPHENE_HOME/include -I$GRAPHENE_HOME/include/graphene-1.0 $CFLAGS"
-export LDFLAGS="-L$GRAPHENE_HOME/lib64 -Wl,-rpath,$GRAPHENE_HOME/lib64 $LDFLAGS"
-export PKG_CONFIG_PATH="$GRAPHENE_HOME/lib64/pkgconfig:$GRAPHENE_HOME/share/pkgconfig:$PKG_CONFIG_PATH"
-export LD_LIBRARY_PATH="$GRAPHENE_HOME/lib64:$LD_LIBRARY_PATH"
+# Set GTK4=1 before sourcing this file (or in your shell) to enable GTK4 paths.
+# These are off by default because they can break GTK3 applications.
+if [[ -n $GTK4 ]]; then
+    export GTK4_HOME=/auto/home/ekhassan/Downloads/gtk4-devel-3.94.0-1.el8.x86_64/gtk4
+    export CFLAGS="-I$GTK4_HOME/include -I$GTK4_HOME/include/gtk-4.0 $CFLAGS"
+    export LDFLAGS="-L$GTK4_HOME/lib64 -Wl,-rpath,$GTK4_HOME/lib64 $LDFLAGS"
+    export PKG_CONFIG_PATH="$GTK4_HOME/lib64/pkgconfig:$GTK4_HOME/share/pkgconfig:$PKG_CONFIG_PATH"
+    export LD_LIBRARY_PATH="$GTK4_HOME/lib64:$LD_LIBRARY_PATH"
+fi
+############################### ADA LANGUAGE SERVER #############################################
+if [[ -n $CFMU_GNATSTUDIO ]];then
+    ALS_PATH="$(dirname "$CFMU_GNATSTUDIO")/libexec/gnatstudio/als"
+    ALS_PATH="$(realpath "$ALS_PATH")"
+    export PATH=$PATH:$ALS_PATH
+fi

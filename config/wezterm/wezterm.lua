@@ -432,6 +432,8 @@ local config = {
     { key = '0',      mods = 'CTRL',                           action = wezterm.action.ResetFontSize },
     { key = 'F11',    action = wezterm.action.ToggleFullScreen },
     { key = 'Enter',  mods = 'ALT',                            action = wezterm.action.Nop },
+    -- Send Menu key as escape sequence for Emacs -nw
+    { key = 'Applications',                                      action = wezterm.action.SendString('\x1b[29~') },
     --
   },
   hyperlink_rules                            = { { regex = '\\b\\w+://[\\w.-]+\\.[a-z]{2,15}\\S*\\b', format = '$0' }, },

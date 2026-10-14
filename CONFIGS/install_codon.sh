@@ -1,21 +1,14 @@
 #!/usr/bin/env bash
-# THIS FILE SHOULD BE IN THE .codon DIRECTORY. The downloaded tar should also be there !!!
 set -e
 set -o pipefail
 
-CODON_INSTALL_DIR=~/.codon
+CODON_INSTALL_DIR=~/.codon2
 OS=$(uname -s | awk '{print tolower($0)}')
 ARCH=$(uname -m)
-
-if [ "$OS" != "linux" ] && [ "$OS" != "darwin" ]; then
-  echo "error: Pre-built binaries only exist for Linux and macOS." >&2
-  exit 1
-fi
-
 CODON_BUILD_ARCHIVE=codon-$OS-$ARCH.tar.gz
-
-#mkdir -p $CODON_INSTALL_DIR
-#cd $CODON_INSTALL_DIR
+mkdir -p $CODON_INSTALL_DIR
+cd $CODON_INSTALL_DIR
+curl -L https://github.com/exaloop/codon/releases/latest/download/"$CODON_BUILD_ARCHIVE" -o $CODON_BUILD_ARCHIVE
 echo "Untarring"
 cat $CODON_BUILD_ARCHIVE | tar zxvf - --strip-components=1
 echo "Untar successful"

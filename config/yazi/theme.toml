@@ -1,6 +1,5 @@
 # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
 
 # vim:fileencoding=utf-8:foldmethod=marker
 
@@ -9,9 +8,6 @@
 [mgr]
 cwd = { fg = "cyan" }
 
-# Hovered
-hovered         = { fg = "black", bg = "lightblue", bold = true }
-preview_hovered = { underline = true }
 
 # Find
 find_keyword  = { fg = "yellow", bold = true, italic = true, underline = true }
@@ -23,10 +19,6 @@ marker_cut      = { fg = "lightred",    bg = "lightred" }
 marker_marked   = { fg = "lightyellow", bg = "lightyellow" }
 marker_selected = { fg = "lightblue",   bg = "lightblue" }
 
-# Tab
-tab_active   = { fg = "black", bg = "white" }
-tab_inactive = { fg = "white", bg = "darkgray" }
-tab_width    = 1
 
 # Count
 count_copied   = { fg = "black", bg = "lightgreen" }
@@ -42,12 +34,28 @@ syntect_theme = ""
 
 # : }}}
 
+# : Indicator {{{
+
+[indicator]
+current = { fg = "black", bg = "lightblue", bold = true }
+preview = { underline = true }
+
+# : }}}
+
+# : Tabs {{{
+
+[tabs]
+active   = { fg = "black", bg = "white" }
+inactive = { fg = "white", bg = "darkgray" }
+
+# : }}}
+
 
 # : Status {{{
 
 [status]
-separator_open  = ""
-separator_close = ""
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 separator_style = { fg = "darkgray", bg = "darkgray" }
 
 # Mode
@@ -111,7 +119,6 @@ icon_command = ""
 [tasks]
 border  = { fg = "blue" }
 title   = {}
-hovered = { underline = true }
 
 # : }}}
 
@@ -133,11 +140,9 @@ separator_style = { fg = "darkgray" }
 # : Help {{{
 
 [help]
-on      = { fg = "magenta" }
-exec    = { fg = "cyan" }
+chord   = { fg = "magenta" }
+action  = { fg = "cyan" }
 desc    = { fg = "gray" }
-hovered = { bg = "darkgray", bold = true }
-footer  = { fg = "black", bg = "white" }
 
 # : }}}
 
@@ -171,161 +176,161 @@ rules = [
 	{ mime = "application/vnd.*", fg = "green" },
 
 	# Fallback
-	{ name = "*", fg = "white" },
-	{ name = "*/", fg = "blue" }
+	{ url = "*", fg = "white" },
+	{ url = "*/", fg = "blue" }
 ]
 
 [icon]
 
 rules = [
 	# Programming
-	{ name = "*.c"    , text = "", fg = "#599eff" },
-	{ name = "*.cpp"  , text = "", fg = "#519aba" },
-	{ name = "*.class", text = "", fg = "#cc3e44" },
-	{ name = "*.cs"   , text = "󰌛", fg = "#596706" },
-	{ name = "*.css"  , text = "", fg = "#42a5f5" },
-	{ name = "*.elm"  , text = "", fg = "#4391d2" },
-	{ name = "*.fish" , text = "", fg = "#4d5a5e" },
-	{ name = "*.go"   , text = "", fg = "#519aba" },
-	{ name = "*.h"    , text = "", fg = "#a074c4" },
-	{ name = "*.hpp"  , text = "", fg = "#a074c4" },
-	{ name = "*.html" , text = "", fg = "#e44d26" },
-	{ name = "*.jar"  , text = "", fg = "#cc3e44" },
-	{ name = "*.java" , text = "", fg = "#cc3e44" },
-	{ name = "*.js"   , text = "", fg = "#F1F134" },
-	{ name = "*.jsx"  , text = "", fg = "#20c2e3" },
-	{ name = "*.lua"  , text = "", fg = "#51a0cf" },
-	{ name = "*.nix"  , text = "", fg = "#7ebae4" },
-	{ name = "*.nu"   , text = ">", fg = "#3aa675" },
-	{ name = "*.php"  , text = "", fg = "#a074c4" },
-	{ name = "*.py"   , text = "", fg = "#ffbc03" },
-	{ name = "*.rb"   , text = "", fg = "#701516" },
-	{ name = "*.rs"   , text = "", fg = "#dea584" },
-	{ name = "*.sbt"  , text = "", fg = "#4d5a5e" },
-	{ name = "*.scala", text = "", fg = "#cc463e" },
-	{ name = "*.scss" , text = "", fg = "#f55385" },
-	{ name = "*.sh"   , text = "", fg = "#4d5a5e" },
-	{ name = "*.swift", text = "", fg = "#e37933" },
-	{ name = "*.ts"   , text = "", fg = "#519aba" },
-	{ name = "*.tsx"  , text = "", fg = "#1354bf" },
-	{ name = "*.vim"  , text = "", fg = "#019833" },
-	{ name = "*.vue"  , text = "󰡄", fg = "#8dc149" },
+	{ url ="*.c"    , text = "", fg = "#599eff" },
+	{ url ="*.cpp"  , text = "", fg = "#519aba" },
+	{ url ="*.class", text = "", fg = "#cc3e44" },
+	{ url ="*.cs"   , text = "󰌛", fg = "#596706" },
+	{ url ="*.css"  , text = "", fg = "#42a5f5" },
+	{ url ="*.elm"  , text = "", fg = "#4391d2" },
+	{ url ="*.fish" , text = "", fg = "#4d5a5e" },
+	{ url ="*.go"   , text = "", fg = "#519aba" },
+	{ url ="*.h"    , text = "", fg = "#a074c4" },
+	{ url ="*.hpp"  , text = "", fg = "#a074c4" },
+	{ url ="*.html" , text = "", fg = "#e44d26" },
+	{ url ="*.jar"  , text = "", fg = "#cc3e44" },
+	{ url ="*.java" , text = "", fg = "#cc3e44" },
+	{ url ="*.js"   , text = "", fg = "#F1F134" },
+	{ url ="*.jsx"  , text = "", fg = "#20c2e3" },
+	{ url ="*.lua"  , text = "", fg = "#51a0cf" },
+	{ url ="*.nix"  , text = "", fg = "#7ebae4" },
+	{ url ="*.nu"   , text = ">", fg = "#3aa675" },
+	{ url ="*.php"  , text = "", fg = "#a074c4" },
+	{ url ="*.py"   , text = "", fg = "#ffbc03" },
+	{ url ="*.rb"   , text = "", fg = "#701516" },
+	{ url ="*.rs"   , text = "", fg = "#dea584" },
+	{ url ="*.sbt"  , text = "", fg = "#4d5a5e" },
+	{ url ="*.scala", text = "", fg = "#cc463e" },
+	{ url ="*.scss" , text = "", fg = "#f55385" },
+	{ url ="*.sh"   , text = "", fg = "#4d5a5e" },
+	{ url ="*.swift", text = "", fg = "#e37933" },
+	{ url ="*.ts"   , text = "", fg = "#519aba" },
+	{ url ="*.tsx"  , text = "", fg = "#1354bf" },
+	{ url ="*.vim"  , text = "", fg = "#019833" },
+	{ url ="*.vue"  , text = "󰡄", fg = "#8dc149" },
 
 	# Text
-	{ name = "*.conf", text = "", fg = "#6d8086" },
-	{ name = "*.ini" , text = "", fg = "#6d8086" },
-	{ name = "*.json", text = "", fg = "#cbcb41" },
-	{ name = "*.kdl" , text = "", fg = "#6d8086" },
-	{ name = "*.md"  , text = "", fg = "#ffffff" },
-	{ name = "*.toml", text = "", fg = "#ffffff" },
-	{ name = "*.txt" , text = "", fg = "#89e051" },
-	{ name = "*.yaml", text = "", fg = "#6d8086" },
-	{ name = "*.yml" , text = "", fg = "#6d8086" },
+	{ url ="*.conf", text = "", fg = "#6d8086" },
+	{ url ="*.ini" , text = "", fg = "#6d8086" },
+	{ url ="*.json", text = "", fg = "#cbcb41" },
+	{ url ="*.kdl" , text = "", fg = "#6d8086" },
+	{ url ="*.md"  , text = "", fg = "#ffffff" },
+	{ url ="*.toml", text = "", fg = "#ffffff" },
+	{ url ="*.txt" , text = "", fg = "#89e051" },
+	{ url ="*.yaml", text = "", fg = "#6d8086" },
+	{ url ="*.yml" , text = "", fg = "#6d8086" },
 
 	# Archives
-	{ name = "*.7z" , text = "" },
-	{ name = "*.bz2", text = "" },
-	{ name = "*.gz" , text = "" },
-	{ name = "*.rar", text = "" },
-	{ name = "*.tar", text = "" },
-	{ name = "*.xz" , text = "" },
-	{ name = "*.zip", text = "" },
+	{ url ="*.7z" , text = "" },
+	{ url ="*.bz2", text = "" },
+	{ url ="*.gz" , text = "" },
+	{ url ="*.rar", text = "" },
+	{ url ="*.tar", text = "" },
+	{ url ="*.xz" , text = "" },
+	{ url ="*.zip", text = "" },
 
 	# Images
-	{ name = "*.HEIC", text = "", fg = "#a074c4" },
-	{ name = "*.avif", text = "", fg = "#a074c4" },
-	{ name = "*.bmp" , text = "", fg = "#a074c4" },
-	{ name = "*.gif" , text = "", fg = "#a074c4" },
-	{ name = "*.ico" , text = "", fg = "#cbcb41" },
-	{ name = "*.jpeg", text = "", fg = "#a074c4" },
-	{ name = "*.jpg" , text = "", fg = "#a074c4" },
-	{ name = "*.png" , text = "", fg = "#a074c4" },
-	{ name = "*.svg" , text = "", fg = "#FFB13B" },
-	{ name = "*.webp", text = "", fg = "#a074c4" },
+	{ url ="*.HEIC", text = "", fg = "#a074c4" },
+	{ url ="*.avif", text = "", fg = "#a074c4" },
+	{ url ="*.bmp" , text = "", fg = "#a074c4" },
+	{ url ="*.gif" , text = "", fg = "#a074c4" },
+	{ url ="*.ico" , text = "", fg = "#cbcb41" },
+	{ url ="*.jpeg", text = "", fg = "#a074c4" },
+	{ url ="*.jpg" , text = "", fg = "#a074c4" },
+	{ url ="*.png" , text = "", fg = "#a074c4" },
+	{ url ="*.svg" , text = "", fg = "#FFB13B" },
+	{ url ="*.webp", text = "", fg = "#a074c4" },
 
 	# Movies
-	{ name = "*.avi" , text = "", fg = "#FD971F" },
-	{ name = "*.mkv" , text = "", fg = "#FD971F" },
-	{ name = "*.mov" , text = "", fg = "#FD971F" },
-	{ name = "*.mp4" , text = "", fg = "#FD971F" },
-	{ name = "*.webm", text = "", fg = "#FD971F" },
+	{ url ="*.avi" , text = "", fg = "#FD971F" },
+	{ url ="*.mkv" , text = "", fg = "#FD971F" },
+	{ url ="*.mov" , text = "", fg = "#FD971F" },
+	{ url ="*.mp4" , text = "", fg = "#FD971F" },
+	{ url ="*.webm", text = "", fg = "#FD971F" },
 
 	# Audio
-	{ name = "*.aac" , text = "", fg = "#66D8EF" },
-	{ name = "*.flac", text = "", fg = "#66D8EF" },
-	{ name = "*.m4a" , text = "", fg = "#66D8EF" },
-	{ name = "*.mp3" , text = "", fg = "#66D8EF" },
-	{ name = "*.ogg" , text = "", fg = "#66D8EF" },
-	{ name = "*.wav" , text = "", fg = "#66D8EF" },
+	{ url ="*.aac" , text = "", fg = "#66D8EF" },
+	{ url ="*.flac", text = "", fg = "#66D8EF" },
+	{ url ="*.m4a" , text = "", fg = "#66D8EF" },
+	{ url ="*.mp3" , text = "", fg = "#66D8EF" },
+	{ url ="*.ogg" , text = "", fg = "#66D8EF" },
+	{ url ="*.wav" , text = "", fg = "#66D8EF" },
 
 	# Documents
-	{ name = "*.csv" , text = "", fg = "#89e051" },
-	{ name = "*.doc" , text = "", fg = "#185abd" },
-	{ name = "*.doct", text = "", fg = "#185abd" },
-	{ name = "*.docx", text = "", fg = "#185abd" },
-	{ name = "*.dot" , text = "", fg = "#185abd" },
-	{ name = "*.ods" , text = "", fg = "#207245" },
-	{ name = "*.ots" , text = "", fg = "#207245" },
-	{ name = "*.pdf" , text = "", fg = "#b30b00" },
-	{ name = "*.pom" , text = "", fg = "#cc3e44" },
-	{ name = "*.pot" , text = "", fg = "#cb4a32" },
-	{ name = "*.potx", text = "", fg = "#cb4a32" },
-	{ name = "*.ppm" , text = "", fg = "#a074c4" },
-	{ name = "*.ppmx", text = "", fg = "#cb4a32" },
-	{ name = "*.pps" , text = "", fg = "#cb4a32" },
-	{ name = "*.ppsx", text = "", fg = "#cb4a32" },
-	{ name = "*.ppt" , text = "", fg = "#cb4a32" },
-	{ name = "*.pptx", text = "", fg = "#cb4a32" },
-	{ name = "*.xlc" , text = "", fg = "#207245" },
-	{ name = "*.xlm" , text = "", fg = "#207245" },
-	{ name = "*.xls" , text = "", fg = "#207245" },
-	{ name = "*.xlsm", text = "", fg = "#207245" },
-	{ name = "*.xlsx", text = "", fg = "#207245" },
-	{ name = "*.xlt" , text = "", fg = "#207245" },
+	{ url ="*.csv" , text = "", fg = "#89e051" },
+	{ url ="*.doc" , text = "", fg = "#185abd" },
+	{ url ="*.doct", text = "", fg = "#185abd" },
+	{ url ="*.docx", text = "", fg = "#185abd" },
+	{ url ="*.dot" , text = "", fg = "#185abd" },
+	{ url ="*.ods" , text = "", fg = "#207245" },
+	{ url ="*.ots" , text = "", fg = "#207245" },
+	{ url ="*.pdf" , text = "", fg = "#b30b00" },
+	{ url ="*.pom" , text = "", fg = "#cc3e44" },
+	{ url ="*.pot" , text = "", fg = "#cb4a32" },
+	{ url ="*.potx", text = "", fg = "#cb4a32" },
+	{ url ="*.ppm" , text = "", fg = "#a074c4" },
+	{ url ="*.ppmx", text = "", fg = "#cb4a32" },
+	{ url ="*.pps" , text = "", fg = "#cb4a32" },
+	{ url ="*.ppsx", text = "", fg = "#cb4a32" },
+	{ url ="*.ppt" , text = "", fg = "#cb4a32" },
+	{ url ="*.pptx", text = "", fg = "#cb4a32" },
+	{ url ="*.xlc" , text = "", fg = "#207245" },
+	{ url ="*.xlm" , text = "", fg = "#207245" },
+	{ url ="*.xls" , text = "", fg = "#207245" },
+	{ url ="*.xlsm", text = "", fg = "#207245" },
+	{ url ="*.xlsx", text = "", fg = "#207245" },
+	{ url ="*.xlt" , text = "", fg = "#207245" },
 
 	# Lockfiles
-	{ name = "*.lock", text = "", fg = "#bbbbbb" },
+	{ url ="*.lock", text = "", fg = "#bbbbbb" },
 
 	# Misc
-	{ name = "*.bin", text = "", fg = "#9F0500" },
-	{ name = "*.exe", text = "", fg = "#9F0500" },
-	{ name = "*.pkg", text = "", fg = "#9F0500" },
+	{ url ="*.bin", text = "", fg = "#9F0500" },
+	{ url ="*.exe", text = "", fg = "#9F0500" },
+	{ url ="*.pkg", text = "", fg = "#9F0500" },
 
 	# Dotfiles
-	{ name = ".DS_Store"     , text = "", fg = "#41535b" },
-	{ name = ".bashprofile"  , text = "", fg = "#89e051" },
-	{ name = ".bashrc"       , text = "", fg = "#89e051" },
-	{ name = ".gitattributes", text = "", fg = "#41535b" },
-	{ name = ".gitignore"    , text = "", fg = "#41535b" },
-	{ name = ".gitmodules"   , text = "", fg = "#41535b" },
-	{ name = ".vimrc"        , text = "", fg = "#019833" },
-	{ name = ".zprofile"     , text = "", fg = "#89e051" },
-	{ name = ".zshenv"       , text = "", fg = "#89e051" },
-	{ name = ".zshrc"        , text = "", fg = "#89e051" },
+	{ url =".DS_Store"     , text = "", fg = "#41535b" },
+	{ url =".bashprofile"  , text = "", fg = "#89e051" },
+	{ url =".bashrc"       , text = "", fg = "#89e051" },
+	{ url =".gitattributes", text = "", fg = "#41535b" },
+	{ url =".gitignore"    , text = "", fg = "#41535b" },
+	{ url =".gitmodules"   , text = "", fg = "#41535b" },
+	{ url =".vimrc"        , text = "", fg = "#019833" },
+	{ url =".zprofile"     , text = "", fg = "#89e051" },
+	{ url =".zshenv"       , text = "", fg = "#89e051" },
+	{ url =".zshrc"        , text = "", fg = "#89e051" },
 
 	# Named files
-	{ name = "COPYING"      , text = "󰿃", fg = "#cbcb41" },
-	{ name = "Containerfile", text = "󰡨", fg = "#458ee6" },
-	{ name = "Dockerfile"   , text = "󰡨", fg = "#458ee6" },
-	{ name = "LICENSE"      , text = "󰿃", fg = "#d0bf41" },
+	{ url ="COPYING"      , text = "󰿃", fg = "#cbcb41" },
+	{ url ="Containerfile", text = "󰡨", fg = "#458ee6" },
+	{ url ="Dockerfile"   , text = "󰡨", fg = "#458ee6" },
+	{ url ="LICENSE"      , text = "󰿃", fg = "#d0bf41" },
 
 	# Directories
-	{ name = ".config/"    , text = "" },
-	{ name = ".git/"       , text = "" },
-	{ name = "Desktop/"    , text = "" },
-	{ name = "Development/", text = "" },
-	{ name = "Documents/"  , text = "" },
-	{ name = "Downloads/"  , text = "" },
-	{ name = "Library/"    , text = "" },
-	{ name = "Movies/"     , text = "" },
-	{ name = "Music/"      , text = "" },
-	{ name = "Pictures/"   , text = "" },
-	{ name = "Public/"     , text = "" },
-	{ name = "Videos/"     , text = "" },
+	{ url =".config/"    , text = "" },
+	{ url =".git/"       , text = "" },
+	{ url ="Desktop/"    , text = "" },
+	{ url ="Development/", text = "" },
+	{ url ="Documents/"  , text = "" },
+	{ url ="Downloads/"  , text = "" },
+	{ url ="Library/"    , text = "" },
+	{ url ="Movies/"     , text = "" },
+	{ url ="Music/"      , text = "" },
+	{ url ="Pictures/"   , text = "" },
+	{ url ="Public/"     , text = "" },
+	{ url ="Videos/"     , text = "" },
 
 	# Default
-	{ name = "*" , text = "" },
-	{ name = "*/", text = "" },
+	{ url ="*" , text = "" },
+	{ url ="*/", text = "" },
 ]
 
 # : }}}

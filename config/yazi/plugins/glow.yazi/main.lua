@@ -46,7 +46,7 @@ function M:peek(job)
 		})
 	else
 		lines = lines:gsub("\t", string.rep(" ", PREVIEW.tab_size))
-		ya.preview_widgets(job, { ui.Text.parse(lines):area(job.area) })
+		ya.preview_widget(job, ui.Text.parse(lines):area(job.area))
 	end
 end
 

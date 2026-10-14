@@ -1,6 +1,5 @@
 # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 [mgr]
 
@@ -100,6 +99,9 @@ keymap = [
 	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy the filename" },
 	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the filename without extension" },
 
+	# Diff
+	{ on = [ "c", "v" ], run = "shell 'meld %s' --orphan", desc = "Compare selected files with meld" },
+
 	# Filter
 	{ on = "f", run = "filter --smart", desc = "Filter files" },
 
@@ -183,8 +185,8 @@ keymap = [
     { on = [ "b", "s" ], run = "plugin --sync dual-pane save_config", desc = "Dual-pane: save current configuration" },
     { on = [ "b", "l" ], run = "plugin --sync dual-pane load_config", desc = "Dual-pane: load saved configuration" },
     { on = [ "b", "r" ], run = "plugin --sync dual-pane reset_config", desc = "Dual-pane: reset saved configuration" },
-    { on = [ "b", "c" ], run = "plugin dual-pane 'shell_fzf /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command (use fzf)" },
-    { on = [ "b", "i" ], run = "plugin dual-pane 'shell_fzf --interactive /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command interactively (use fzf)" },
+    { on = [ "b", "c" ], run = "plugin dual-pane -- 'shell_fzf /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command (use fzf)" },
+    { on = [ "b", "i" ], run = "plugin dual-pane -- 'shell_fzf --interactive /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command interactively (use fzf)" },
 
 
 ]
@@ -377,6 +379,9 @@ keymap = [
 	{ on = "~",    run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
+[[mgr.prepend_keymap]]
+on = "0"
+run = "plugin zping"
 
 [[mgr.prepend_keymap]]
 on   = [ "c", "m" ]
@@ -387,7 +392,7 @@ desc = "Chmod on selected files"
 #on   = [ "T" ]
 on   = [ "<C-b>" ] # same shorcut as vscode
 #run  = "plugin hide-preview"
-run  = "plugin toggle-pane min-preview"
+run  = "plugin toggle-pane -- min-preview"
 desc = "Hide or show preview"
 
 [[mgr.prepend_keymap]]
@@ -442,67 +447,67 @@ desc = "Yazi command prompt"
 ######################################################################
 [[mgr.prepend_keymap]]
 on = [ "u", "a" ]
-run = "plugin bookmarks save"
+run = "plugin bookmarks -- save"
 desc = "Save current position as a bookmark"
 
 [[mgr.prepend_keymap]]
 on = [ "u", "g" ]
-run = "plugin bookmarks jump"
+run = "plugin bookmarks -- jump"
 desc = "Jump to a bookmark"
 
 [[mgr.prepend_keymap]]
 on = [ "u", "d" ]
-run = "plugin bookmarks delete"
+run = "plugin bookmarks -- delete"
 desc = "Delete a bookmark"
 
 [[mgr.prepend_keymap]]
 on = [ "u", "D" ]
-run = "plugin bookmarks delete_all"
+run = "plugin bookmarks -- delete_all"
 desc = "Delete all bookmarks"
 
 [[mgr.prepend_keymap]]
 on = [ "u", "m" ]
-run = "plugin bookmarks modify"
+run = "plugin bookmarks -- modify"
 desc = "modify key bind to hoverd path"
 #####################################################################
 [[mgr.prepend_keymap]]
 on = [ "U", "a" ]
-run = "plugin yamb save"
+run = "plugin yamb -- save"
 desc = "Add bookmark"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "g" ]
-run = "plugin yamb jump_by_key"
+run = "plugin yamb -- jump_by_key"
 desc = "Jump bookmark by key"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "G" ]
-run = "plugin yamb jump_by_fzf"
+run = "plugin yamb -- jump_by_fzf"
 desc = "Jump bookmark by fzf"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "d" ]
-run = "plugin yamb delete_by_key"
+run = "plugin yamb -- delete_by_key"
 desc = "Delete bookmark by key"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "D" ]
-run = "plugin yamb delete_by_fzf"
+run = "plugin yamb -- delete_by_fzf"
 desc = "Delete bookmark by fzf"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "A" ]
-run = "plugin yamb delete_all"
+run = "plugin yamb -- delete_all"
 desc = "Delete all bookmarks"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "r" ]
-run = "plugin yamb rename_by_key"
+run = "plugin yamb -- rename_by_key"
 desc = "Rename bookmark by key"
 
 [[mgr.prepend_keymap]]
 on = [ "U", "R" ]
-run = "plugin yamb rename_by_fzf"
+run = "plugin yamb -- rename_by_fzf"
 desc = "Rename bookmark by fzf"
 
 ######################################################################
@@ -795,6 +800,10 @@ desc = "replace-select --keys=!1q --mode=or"
 on = [ "T", "s", "u" ]
 run = "plugin simple-tag -- undo-select"
 desc = "Undos/Redos the last selection action" 
-
+	# show git file changes
+[[mgr.prepend_keymap]]
+on   = [ "g", "c" ]
+run  = "plugin vcs-files"
+desc = "Show Git file changes"
 
 

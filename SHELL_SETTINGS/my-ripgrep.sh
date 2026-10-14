@@ -224,3 +224,25 @@ rfv() (
       --preview-window '~4,+{2}+4/3,<80(up)' \
       --query "$*"
 )
+
+fif1() {
+ : quickly find in files using fuzzy search and surrounding context
+ local query="${*:-}"
+ local result file line
+ result="$(
+        FZF_DEFAULT_COMMAND="rg --column --line-number --no-heading --color=always --smart-case -- '$query'" \
+        fzf --ansi \
+            --disabled \
+            --query "$query" \
+            --bind 'change:reload:rg --column --line-number --no-heading --color=always --smart-case -- {q} || true' \
+            --delimiter ':' \
+            --nth '4..' \
+            --preview 'bat --style=numbers --color=always --highlight-line {2} -- {1}' \
+            --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+    )" || return
+ [[ -z "$result" ]] && return
+ file="${result%%:*}"
+ result="${result#*:}"
+ line="${result%%:*}"
+ "${EDITOR:-vim}" "$file" "+$line"
+}

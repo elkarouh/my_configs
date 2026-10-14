@@ -65,6 +65,8 @@ config/zed/settings.json|$HOME/.config/zed/settings.json
 config/sublime-text/Packages/User/Default (Linux).sublime-keymap|$HOME/.config/sublime-text/Packages/User/Default (Linux).sublime-keymap
 config/sublime-text/Packages/ClaudeCode|$HOME/.config/sublime-text/Packages/ClaudeCode
 config/sublime-text/Packages/Terminus|$HOME/.config/sublime-text/Packages/Terminus
+config/warp-oss/settings.toml|$HOME/.config/warp-oss/settings.toml
+config/warp-oss/user_preferences.json|$HOME/.config/warp-oss/user_preferences.json
 "
 
 sync_item() {
@@ -96,9 +98,22 @@ sync_item() {
     fi
 }
 
+sanitize_warp_prefs() {
+    local f="$REPO/config/warp-oss/user_preferences.json"
+    [[ ! -f $f ]] && return
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "  WARN: jq not found, skipping warp prefs sanitize"
+        return
+    fi
+    local tmp="$f.tmp"
+    jq 'del(.prefs.ExperimentId, .prefs.MCPExecutionPath)' "$f" > "$tmp" && mv "$tmp" "$f"
+    echo "  SANITIZED $f (stripped ExperimentId, MCPExecutionPath)"
+}
+
 echo "=== sync $DIRECTION ==="
 echo "$MAPPINGS" | while IFS='|' read repo_rel live; do
     [[ -z $repo_rel ]] && continue
     sync_item "$repo_rel" "$live"
 done
+[[ $DIRECTION == pull ]] && sanitize_warp_prefs
 echo "=== done ==="

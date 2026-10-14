@@ -15,7 +15,7 @@ function M:peek(job)
 
 	ya.sleep(math.max(0, rt.preview.image_delay / 1000 + start - os.clock()))
 	ya.image_show(cache, job.area)
-	ya.preview_widgets(job, {})
+	ya.preview_widget(job, {})
 end
 
 function M:seek(job)

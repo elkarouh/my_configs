@@ -22,6 +22,7 @@ rulers = [130] # show a ruler at column 130
 # scroll-lines = 1
 completion-trigger-len = 1
 popup-border = "all"
+insecure = true
 
 [editor.search]
 smart-case = true
