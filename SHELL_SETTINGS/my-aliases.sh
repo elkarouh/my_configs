@@ -405,9 +405,6 @@ COLORIZE="s,([^/]+/?)$,$YELLOW\1$RESET,"
 # sed: strip ansi color sequences
 DECOLORIZE="s,${ESC}[[0-9;]*[mK],,g"
 CDHISTFILE="$HOME/.cd_history"
-cd() {
-  command cd "$@" && printf '%s\n' "$PWD" >> "$CDHISTFILE"
-}
 c() {
   dir=$(
     tac "$CDHISTFILE" |
