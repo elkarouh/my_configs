@@ -398,12 +398,12 @@ alias jimmy="$HOME/jimmy-env/bin/jimmy"
 ####################### https://github.com/stianhoiland/cd ########################################
 export MY_FUZZY_PICKER=fzf
 ESC=$'\x1b'
-YELLOW="$ESC[33m"
-RESET="$ESC[0m"
+YELLOW="${ESC}[33m"
+RESET="${ESC}[0m"
 # sed -r: colorize last path component
 COLORIZE="s,([^/]+/?)$,$YELLOW\1$RESET,"
 # sed: strip ansi color sequences
-DECOLORIZE="s,$ESC[[0-9;]*[mK],,g"
+DECOLORIZE="s,${ESC}[[0-9;]*[mK],,g"
 CDHISTFILE="$HOME/.cd_history"
 cd() {
   command cd "$@" && printf '%s\n' "$PWD" >> "$CDHISTFILE"
