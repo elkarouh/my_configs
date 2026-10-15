@@ -54,6 +54,7 @@ source $HOME/.local/SHELL_SETTINGS/fzf_completion_widget.sh
 ########################################## yazi navigator #####################################################
 #bindkey -s '^b' 'el\n'  #  CALL elio | yazi with ctrl-b (b for browser !!!)
 bindkey -s '^b' 'yy\n'  #  CALL elio | yazi with ctrl-b (b for browser !!!)
+bindkey -s '\ey' 'yy\n'  #  same, via Alt-y (ctrl-b is intercepted by Warp Terminal)
 function yy() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
   yazi "$@" --cwd-file="$tmp"
@@ -62,6 +63,8 @@ function yy() {
   fi
   rm -f -- "$tmp"
 }
+alias y='yy'
+
 # elio: cd into the directory elio was in when you quit
 el() {
   typeset tmp cwd

@@ -406,7 +406,7 @@ COLORIZE="s,([^/]+/?)$,$YELLOW\1$RESET,"
 DECOLORIZE="s,${ESC}[[0-9;]*[mK],,g"
 CDHISTFILE="$HOME/.cd_history"
 cd() {
-  command cd "$@" && printf '%s\n' "$PWD" >> "$CDHISTFILE"
+  builtin cd "$@" && printf '%s\n' "$PWD" >> "$CDHISTFILE"
 }
 c() {
   dir=$(
