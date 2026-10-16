@@ -1,3 +1,4 @@
+--- @sync entry
 local set_state = ya.sync(function(state, key, value)
   state[key] = value
 end)
@@ -16,11 +17,11 @@ end)
 local get_cwd = ya.sync(function() return cx.active.current.cwd end)
 
 local function _get_command(filename)
-	local _permit = ya.hide()
+	local _permit = ui.hide()
 	local cwd = tostring(get_cwd())
 
 	local child, err =
-		Command("bash"):args({ "-c", "cat " .. filename .. " | fzf" }):cwd(cwd):stdin(Command.INHERIT):stdout(Command.PIPED):stderr(Command.INHERIT):spawn()
+		Command("bash"):arg({ "-c", "cat " .. filename .. " | fzf" }):cwd(cwd):stdin(Command.INHERIT):stdout(Command.PIPED):stderr(Command.INHERIT):spawn()
 
 	if not child then
 		return fail("Spawn `fzf` failed with error code %s. Do you have it installed?", err)
@@ -39,6 +40,15 @@ local function _get_command(filename)
   return target
 end
 
+-- yazi 26.x: the selection holds File objects; collect their urls
+local function selected_urls(tab)
+  local urls = {}
+  for _, f in pairs(tab.selected) do
+    urls[#urls + 1] = f.url or f
+  end
+  return urls
+end
+
 -- Prepare urls
 local _prepare_urls = ya.sync(function(state, macro)
   local pane = get_state("cpane")
@@ -49,7 +59,7 @@ local _prepare_urls = ya.sync(function(state, macro)
   local urls = nil
   if macro == "f" then
     if #this.selected > 0 then
-      urls = this.selected
+      urls = selected_urls(this)
     elseif this.current.hovered ~= nil then
       urls = { this.current.hovered.url }
     end
@@ -65,7 +75,7 @@ local _prepare_urls = ya.sync(function(state, macro)
     end
   elseif macro == "F" then
     if #other.selected > 0 then
-      urls = other.selected
+      urls = selected_urls(other)
     elseif other.current.hovered ~= nil then
       urls = { other.current.hovered.url }
     end
@@ -91,11 +101,11 @@ local _prepare_expansion = ya.sync(function(state, urls, modifier)
       if modifier == "" then
         name = tostring(url)
       elseif modifier == "n" then
-        name = url:name()
+        name = url.name
       elseif modifier == "s" then
-        name = url:stem()
+        name = url.stem
       elseif modifier == "e" then
-        name = url:ext()
+        name = url.ext
       end
       if name == nil then
         name = ""
@@ -274,9 +284,9 @@ local DualPane = {
 
       local s = ya.readable_path(tostring(header._tab.current.cwd)) .. header:flags()
       if header.pane == self.pane then
-        return ui.Span(ya.truncate(s, { max = max, rtl = true })):style(THEME.manager.tab_active)
+        return ui.Span(ui.truncate(s, { max = max, rtl = true })):style(th.tabs.active)
       else
-        return ui.Span(ya.truncate(s, { max = max, rtl = true })):style(THEME.manager.tab_inactive)
+        return ui.Span(ui.truncate(s, { max = max, rtl = true })):style(th.tabs.inactive)
       end
     end
 
@@ -291,13 +301,13 @@ local DualPane = {
       local spans = {}
       for i = 1, tabs do
         local text = i
-        if THEME.manager.tab_width > 2 then
-          text = ya.truncate(text .. " " .. cx.tabs[i]:name(), { max = THEME.manager.tab_width })
+        if false then -- tab names: theme option removed in yazi 26.x
+          text = ui.truncate(text .. " " .. cx.tabs[i]:name(), { max = 20 })
         end
         if i == active then
-          spans[#spans + 1] = ui.Span(" " .. text .. " "):style(THEME.manager.tab_active)
+          spans[#spans + 1] = ui.Span(" " .. text .. " "):style(th.tabs.active)
         else
-          spans[#spans + 1] = ui.Span(" " .. text .. " "):style(THEME.manager.tab_inactive)
+          spans[#spans + 1] = ui.Span(" " .. text .. " "):style(th.tabs.inactive)
         end
       end
       return ui.Line(spans)
@@ -355,8 +365,8 @@ local DualPane = {
           }
           
           -- Store selected items
-          for _, item in ipairs(tab.selected) do
-            table.insert(position.selected, tostring(item))
+          for _, item in pairs(tab.selected) do
+            table.insert(position.selected, tostring(item.url or item))
           end
           
           -- Store this state
@@ -417,7 +427,7 @@ local DualPane = {
       self._destroy(self)
       self.view = nil
     end
-    ya.app_emit("resize", {})
+    ya.emit("app:resize", {})
   end,
 
   toggle_zoom = function(self)
@@ -429,7 +439,7 @@ local DualPane = {
         self._config_dual_pane(self)
         self.view = 0
       end
-      ya.app_emit("resize", {})
+      ya.emit("app:resize", {})
     end
   end,
 
@@ -437,8 +447,8 @@ local DualPane = {
     if self.view and self.pane then
       self.pane = self.pane % 2 + 1
       local tab = self.tabs[self.pane]
-      ya.manager_emit("tab_switch", { tab - 1 })
-      ya.app_emit("resize", {})
+      ya.emit("tab_switch", { tab - 1 })
+      ya.emit("app:resize", {})
     end
   end,
 
@@ -455,31 +465,31 @@ local DualPane = {
       local current_tab = cx.tabs.idx
       
       -- Switch to inactive tab
-      ya.manager_emit("tab_switch", { inactive_tab - 1 })
+      ya.emit("tab_switch", { inactive_tab - 1 })
       
       -- Execute command
       if command == "up" then
-        ya.manager_emit("arrow_up", args or {})
+        ya.emit("arrow", { -1 })
       elseif command == "down" then
-        ya.manager_emit("arrow_down", args or {})
+        ya.emit("arrow", { 1 })
       elseif command == "left" or command == "parent" then
-        ya.manager_emit("parent", args or {})
+        ya.emit("leave", args or {})
       elseif command == "right" or command == "open" then
-        ya.manager_emit("open", args or {})
+        ya.emit("open", args or {})
       elseif command == "top" then
-        ya.manager_emit("jump_first", args or {})
+        ya.emit("arrow", { "top" })
       elseif command == "bottom" then
-        ya.manager_emit("jump_last", args or {})
+        ya.emit("arrow", { "bot" })
       end
       
       -- Save state for inactive pane
       self._save_pane_state(self)
       
       -- Switch back to active tab
-      ya.manager_emit("tab_switch", { current_tab - 1 })
+      ya.emit("tab_switch", { current_tab - 1 })
       
       -- Force refresh
-      ya.app_emit("resize", {})
+      ya.emit("app:resize", {})
     end
   end,
 
@@ -491,19 +501,19 @@ local DualPane = {
       local dst_tab = self.tabs[self.pane % 2 + 1]
       -- yank selected
       if cut then
-        ya.manager_emit("yank", { cut = true })
+        ya.emit("yank", { cut = true })
       else
-        ya.manager_emit("yank", {})
+        ya.emit("yank", {})
       end
       -- select dst tab
-      ya.manager_emit("tab_switch", { dst_tab - 1 })
+      ya.emit("tab_switch", { dst_tab - 1 })
       -- paste
-      ya.manager_emit("paste", { force = force, follow = follow })
+      ya.emit("paste", { force = force, follow = follow })
       -- unyank
-      ya.manager_emit("unyank", {})
+      ya.emit("unyank", {})
       -- select src tab again
-      ya.manager_emit("tab_switch", { src_tab - 1 })
-      ya.app_emit("resize", {})
+      ya.emit("tab_switch", { src_tab - 1 })
+      ya.emit("app:resize", {})
     end
   end,
 
@@ -511,7 +521,7 @@ local DualPane = {
     if self.pane then
       self.tabs[self.pane] = tab_number
     end
-    ya.manager_emit("tab_switch", { tab_number - 1 })
+    ya.emit("tab_switch", { tab_number - 1 })
   end,
 
   load_config = function(self, state)
@@ -521,26 +531,26 @@ local DualPane = {
     local len = #cx.tabs
     -- First switch to the last tab, as new ones will be inserted after the
     -- active one
-    ya.manager_emit("tab_switch", { len - 1 })
+    ya.emit("tab_switch", { len - 1 })
     -- Add stored tabs
     for _, path in ipairs(state.paths) do
-      ya.manager_emit("tab_create", { path.cwd })
+      ya.emit("tab_create", { path.cwd })
       if path.file ~= "" then
-        ya.manager_emit("reveal", { path.file })
+        ya.emit("reveal", { path.file })
       end
     end
     -- Now delete the old ones
     for i = 1, len do
-      ya.manager_emit("tab_close", { 0 })
+      ya.emit("tab_close", { 0 })
     end
     self.tabs = { state.tabs[1], state.tabs[2] }
     self.pane = state.pane
     -- Refresh other pane
-    ya.manager_emit("tab_switch", { self.tabs[self.pane %2 + 1] - 1 })
-    ya.manager_emit("refresh", {})
+    ya.emit("tab_switch", { self.tabs[self.pane %2 + 1] - 1 })
+    ya.emit("refresh", {})
 
-    ya.manager_emit("tab_switch", { self.tabs[self.pane] - 1 })
-    ya.app_emit("resize", {})
+    ya.emit("tab_switch", { self.tabs[self.pane] - 1 })
+    ya.emit("app:resize", {})
   end,
 
   save_config = function(self, state)
@@ -575,7 +585,7 @@ local DualPane = {
   shell = function(self, state, cmd, blocking)
     local expanded = _expand_macros(cmd)
     if expanded ~= "" then
-      ya.manager_emit("shell", { block = blocking, orphan = true, confirm = true, expanded } )
+      ya.emit("shell", { block = blocking, orphan = true, confirm = true, expanded } )
     end
   end
 }
@@ -623,7 +633,9 @@ local function get_copy_arguments(args)
   return force, follow
 end
 
-local function entry(state, args)
+local function entry(state, job)
+  -- yazi 26.x passes a job; the arguments are in job.args
+  local args = job.args or job
   local action = args[1]
   if not action then
     return
@@ -663,9 +675,9 @@ local function entry(state, args)
       else
         dir = args[2]
       end
-      ya.manager_emit("tab_create", { dir })
+      ya.emit("tab_create", { dir })
     else
-      ya.manager_emit("tab_create", {})
+      ya.emit("tab_create", {})
     end
     -- The new tab is cx.tabs.idx + 1, so we need to correct the non-active
     -- pane if its tab number is higher than the one in the non-active
@@ -676,7 +688,7 @@ local function entry(state, args)
     end
     DualPane:tab_switch(cx.tabs.idx + 1)
     -- At this point, the new tab may have not been created yet, as
-    -- ya.manager_emit() is not synchronous. So we have the "other" pane
+    -- ya.emit() is not synchronous. So we have the "other" pane
     -- in a limbo state until we switch to it manually (ordering doesn't
     -- respect the global configuration)
   elseif action == "load_config" then

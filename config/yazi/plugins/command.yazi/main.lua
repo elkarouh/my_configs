@@ -1,3 +1,5 @@
+--- @since 25.12.29
+
 -- Function to check if flag is valid
 local function is_flag_in_allowed(test_flag, allowed_list)
 	for _, flag in ipairs(allowed_list) do
@@ -23,74 +25,52 @@ return {
 		-- Define all commands and their flags
 		local command_flags = {
 			escape = { "--all", "--find", "--visual", "--select", "--filter", "--search" },
-			quit = { "--no-cwd-file" },
+			quit = { "--code", "--no-cwd-file" },
+			close = { "--code", "--no-cwd-file" },
+			suspend = {},
+			arrow = {},
 			leave = {},
 			enter = {},
 			back = {},
+			forward = {},
 			seek = {},
+			spot = {},
 			cd = { "--interactive" },
 			reveal = {},
-			select = { "--state" },
-			select_all = { "--state" },
-      toggle = { "--state" },
+			toggle = { "--state" },
 			toggle_all = { "--state" },
 			visual_mode = { "--unset" },
 			open = { "--interactive", "--hovered" },
 			yank = { "--cut" },
 			unyank = {},
-			paste = { "--force", "--follow", "--before" },
+			paste = { "--force", "--follow" },
 			link = { "--relative", "--force" },
+			hardlink = { "--force", "--follow" },
 			remove = { "--force", "--permanently", "--hovered" },
-			create = { "--force", "--dir" },
+			create = { "--dir", "--force" },
 			rename = { "--hovered", "--force", "--empty", "--cursor" },
-			copy = {},
-			shell = { "--confirm", "--block", "--orphan", "--interactive" },
+			copy = { "--separator", "--hovered" },
+			shell = { "--confirm", "--block", "--orphan", "--interactive", "--cursor" },
 			hidden = {},
 			linemode = {},
-			search = {},
+			search = { "--via", "--args" },
 			find = { "--previous", "--smart", "--insensitive" },
 			find_arrow = { "--previous" },
 			filter = { "--smart", "--insensitive" },
 			sort = { "--reverse", "--dir-first", "--translit" },
 			tab_create = { "--current" },
+			tab_close = {},
 			tab_switch = { "--relative" },
 			tab_swap = {},
-			tasks_show = {},
-			close = { "--submit" },
-			arrow = {},
-			inspect = {},
-			cancel = {},
-			plugin = { "--args" },
-			move = { "--in-operating" },
-			backword = {},
-			forward = { "--end-of-word" },
-			insert = { "--append" },
-			visual = {},
-			delete = { "--cut", "--insert" },
-			undo = {},
-			redo = {},
 			help = {},
-			backspace = { "--under" },
-			kill = {},
-			close_input = {},
-			peek = { "--force" },
-			hardlink = { "--follow", "--force" },
-			bulk_rename = {},
-			hover = {},
-			refresh = {},
-      suspend = {},
-			tab_close = {},
-			update_files = {},
-			update_mimetype = {},
-			update_paged = {},
-			update_yanked = {},
-      spot = {},
+			plugin = { "--args" },
+			noop = {},
 		}
 
 		-- Get input from the user with a prompt window
 		local command, event = ya.input({
 			title = "Command:", -- Title of the input prompt
-			position = { "top-center", y = 3, w = 40 }, -- Positioning details
+			pos = { "top-center", y = 3, w = 40 }, -- Positioning details
 		})
 
 		-- Check if the input was cancelled or closed
@@ -137,6 +117,6 @@ return {
 		table.insert(flags, tostring(secondary_command))
 
 		-- Execute the main command with the parsed parameters
-		ya.manager_emit(tostring(main_command), flags)
+		ya.emit(tostring(main_command), flags)
 	end,
 }

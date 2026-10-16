@@ -134,6 +134,11 @@ previewers = [
 	{ url = "*", run = 'piper -- hexyl --border=none --terminal-width=$w "$1"'},
 ]
 
+prepend_fetchers = [
+	{ id = "simple-tag", url = "*",  run = "simple-tag", group = "simple-tag" },
+	{ id = "simple-tag", url = "*/", run = "simple-tag", group = "simple-tag" },
+]
+
 [input]
 # cd
 cd_title  = "Change directory:"

@@ -42,6 +42,7 @@ local DEFAULT_TAG_ICON = "󰚋"
 local DEFAULT_LINEMODE_ORDER = 500
 
 local STATE_KEY = {
+	tag_list = "tag_list",
 	ui_mode = "ui_mode",
 	preserve_selected_files = "preserve_selected_files",
 	colors = "colors",
@@ -370,10 +371,20 @@ local get_cwd = ya.sync(function()
 	return cx.active.current.cwd
 end)
 
+-- Real path of a url as a string. Inside a filter/search view yazi uses
+-- "search://" urls; tags are stored under the real folder path.
+local function real_str(u)
+	if u.spec and u.spec.is_search then
+		return tostring(u.path)
+	end
+	return tostring(u)
+end
+
 local selected_files = ya.sync(function()
 	local tab, raw_urls = cx.active, {}
-	for _, u in pairs(tab.selected) do
-		raw_urls[#raw_urls + 1] = tostring(u)
+	for _, f in pairs(tab.selected) do
+		-- yazi 26.x stores File objects in the selection, older versions Urls
+		raw_urls[#raw_urls + 1] = real_str(f.url or f)
 	end
 	return raw_urls
 end)
@@ -381,7 +392,7 @@ end)
 local selected_or_hovered_files = ya.sync(function()
 	local tab, raw_urls = cx.active, selected_files()
 	if #raw_urls == 0 and tab.current.hovered then
-		raw_urls[1] = tostring(tab.current.hovered.url)
+		raw_urls[1] = real_str(tab.current.hovered.url)
 	end
 	return raw_urls
 end)
@@ -460,14 +471,22 @@ end
 function M:fetch(job)
 	local tags_db = get_state(STATE_KEY.tags_database)
 	for _, file in ipairs(job.files) do
-		local tags_tbl = tostring(file.url.parent)
+		local tags_tbl = real_str(file.url.parent)
 		if tags_db[tags_tbl] == nil then
 			tags_db[tags_tbl] = read_tags_tbl(tags_tbl)
 		end
 	end
 	set_state(STATE_KEY.tags_database, tags_db)
 	render()
-	return true
+
+	-- Yazi 26.x: a fetcher must return a coroutine that reports each file as done
+	-- (same as yazi's built-in "noop" fetcher). Returning `true` causes
+	-- "error converting Lua boolean to function".
+	return ya.co(function()
+		for _, file in ipairs(job.files) do
+			coroutine.yield(file, {})
+		end
+	end)
 end
 
 function M:has_tags(file, filter_tags)
@@ -500,16 +519,14 @@ local function delete_tags()
 	local tags_db = get_state(STATE_KEY.tags_database)
 	for _, raw_url in ipairs(files_to_clear) do
 		local url = type(raw_url) == "string" and Url(raw_url) or raw_url
-		if url == nil then
-			goto continue
+		if url ~= nil then
+			local tags_tbl = tostring(url.parent)
+			local fname = tostring(url.name)
+			if tags_db and tags_tbl and tags_db[tags_tbl] then
+				tags_db[tags_tbl][fname] = nil
+				changed_tags_db[tags_tbl] = tags_db[tags_tbl]
+			end
 		end
-		local tags_tbl = tostring(url.parent)
-		local fname = tostring(url.name)
-		if tags_db and tags_tbl and tags_db[tags_tbl] then
-			tags_db[tags_tbl][fname] = nil
-			changed_tags_db[tags_tbl] = tags_db[tags_tbl]
-		end
-		::continue::
 	end
 	enqueue_task(STATE_KEY.tasks_write_tags_db, changed_tags_db)
 	write_tags_db()
@@ -543,13 +560,42 @@ function M:setup(opts)
 		st[STATE_KEY.hints_disabled] = opts.hints_disabled or false
 	end
 
+	-- Tags offered in the icon picker: every tag given an icon or colour in
+	-- init.lua. With none configured, offer six coloured dots.
+	local tag_set = {}
+	for key, _ in pairs(st[STATE_KEY.icons]) do
+		if key ~= "default" then
+			tag_set[key] = true
+		end
+	end
+	for key, _ in pairs(st[STATE_KEY.colors]) do
+		if key ~= "reversed" then
+			tag_set[key] = true
+		end
+	end
+	if next(tag_set) == nil then
+		local defaults = { "red", "yellow", "green", "blue", "magenta", "cyan" }
+		for i, color in ipairs(defaults) do
+			local key = tostring(i)
+			st[STATE_KEY.icons][key] = "●"
+			st[STATE_KEY.colors][key] = color
+			tag_set[key] = true
+		end
+	end
+	local tag_list = {}
+	for key, _ in pairs(tag_set) do
+		tag_list[#tag_list + 1] = key
+	end
+	table.sort(tag_list)
+	st[STATE_KEY.tag_list] = tag_list
+
 	st[STATE_KEY.hints_table] = ya.dict_merge(tbl_deep_clone(st[STATE_KEY.icons]), tbl_deep_clone(st[STATE_KEY.colors]))
 	-- render tags
 	Linemode:children_add(function(_self)
 		if st[STATE_KEY.ui_mode] == UI_MODE.hidden then
 			return ""
 		end
-		local tags_tbl = tostring(_self._file.url.parent)
+		local tags_tbl = real_str(_self._file.url.parent)
 		local fname = _self._file.name
 		local spans = {}
 		if st[STATE_KEY.tags_database][tags_tbl] and st[STATE_KEY.tags_database][tags_tbl][fname] then
@@ -561,14 +607,12 @@ function M:setup(opts)
 			table.sort(tags)
 			for _, tag in ipairs(tags) do
 				local style = ui.Style()
-				if _self._file.is_hovered then
-					if is_reversed_color then
-						style:bg(st[STATE_KEY.colors][tag] and st[STATE_KEY.colors][tag] or "reset")
-					else
-						style:fg(st[STATE_KEY.colors][tag] and st[STATE_KEY.colors][tag] or "reset")
-					end
+				-- Style methods return a new style in yazi 26.x, so assign the result
+				local color = st[STATE_KEY.colors][tag] or "reset"
+				if _self._file.is_hovered and is_reversed_color then
+					style = style:bg(color)
 				else
-					style:fg(st[STATE_KEY.colors][tag] and st[STATE_KEY.colors][tag] or "reset")
+					style = style:fg(color)
 				end
 				if st[STATE_KEY.ui_mode] == UI_MODE.icon then
 					spans[#spans + 1] = ui.Span(" " .. (st[STATE_KEY.icons][tag] or st[STATE_KEY.icons].default))
@@ -832,16 +876,125 @@ function M:redraw()
 	}
 end
 
-local function show_cands_input_tags(title, input_mode, default_input_value)
-	local choice
-	if not input_mode then
-		toggle_tags_hints()
-		choice = ya.which({ cands = CAND_TAG_KEYS, silent = true })
-		toggle_tags_hints()
-		if not choice then
-			return
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                       Icon picker                       │
+--          ╰─────────────────────────────────────────────────────────╯
+-- A small centred popup listing only the tag icons. Up/Down (or k/j) to move,
+-- Enter (or Right/l) to choose, Esc to cancel. Tag keys stay hidden.
+
+local PICKER_KEYS = {
+	{ on = "<Up>" }, { on = "k" },
+	{ on = "<Down>" }, { on = "j" },
+	{ on = "<Enter>" }, { on = "<Right>" }, { on = "l" },
+	{ on = "<Esc>" }, { on = "q" }, { on = "<C-c>" },
+}
+
+local picker_open = ya.sync(function(st, title)
+	local items = st[STATE_KEY.tag_list] or {}
+	if #items == 0 then
+		return 0
+	end
+	st.picker = { title = title, cursor = 1 }
+
+	local comp = { _id = "simple-tag-picker" }
+	function comp:new(area)
+		return setmetatable({ _area = area }, { __index = comp })
+	end
+	function comp:reflow()
+		return { self }
+	end
+	function comp:redraw()
+		local p = st.picker
+		if not p then
+			return {}
 		end
-		return CAND_TAG_KEYS[choice].on
+		local a = self._area
+		local w = math.min(math.max(utf8.len(p.title) or 0, 10) + 6, a.w)
+		local h = math.min(#items + 2, a.h)
+		local box = ui.Rect({
+			x = a.x + math.floor((a.w - w) / 2),
+			y = a.y + math.floor((a.h - h) / 2),
+			w = w,
+			h = h,
+		})
+		local lines = {}
+		for i, key in ipairs(items) do
+			local icon = st[STATE_KEY.icons][key] or st[STATE_KEY.icons].default
+			local color = st[STATE_KEY.colors][key] or "reset"
+			local selected = i == p.cursor
+			local line = ui.Line({
+				ui.Span(selected and "▶ " or "  "),
+				ui.Span(icon):fg(color),
+				ui.Span("  "),
+			}):align(ui.Align.CENTER)
+			if selected then
+				line = line:style(ui.Style():bg("darkgray"))
+			end
+			lines[#lines + 1] = line
+		end
+		return {
+			ui.Clear(box),
+			ui.Border(ui.Edge.ALL)
+				:area(box)
+				:type(ui.Border.ROUNDED)
+				:style(ui.Style():fg("blue"))
+				:title(ui.Line(p.title):align(ui.Align.CENTER)),
+			ui.Text(lines):area(box:pad(ui.Pad(1, 1, 1, 1))),
+		}
+	end
+
+	st.picker_id = Modal:children_add(comp, 21)
+	;(ui.render or ya.render)()
+	return #items
+end)
+
+local picker_move = ya.sync(function(st, delta)
+	local n = #(st[STATE_KEY.tag_list] or {})
+	if st.picker and n > 0 then
+		st.picker.cursor = (st.picker.cursor - 1 + delta) % n + 1
+	end
+	;(ui.render or ya.render)()
+end)
+
+-- Closes the picker; returns the chosen tag key when `choose` is true.
+local picker_close = ya.sync(function(st, choose)
+	local key
+	if choose and st.picker then
+		key = st[STATE_KEY.tag_list][st.picker.cursor]
+	end
+	if st.picker_id then
+		Modal:children_remove(st.picker_id)
+	end
+	st.picker, st.picker_id = nil, nil
+	;(ui.render or ya.render)()
+	return key
+end)
+
+local function pick_tag(title)
+	-- "Select tags, ACTION=(replace):" -> "Select tags"
+	title = title:gsub(",.*$", ""):gsub(":%s*$", "")
+	if picker_open(title) == 0 then
+		return nil
+	end
+	while true do
+		local choice = ya.which({ cands = PICKER_KEYS, silent = true })
+		local on = choice and PICKER_KEYS[choice].on
+		if on == "<Up>" or on == "k" then
+			picker_move(-1)
+		elseif on == "<Down>" or on == "j" then
+			picker_move(1)
+		elseif on == "<Enter>" or on == "<Right>" or on == "l" then
+			return picker_close(true)
+		else
+			picker_close(false)
+			return nil
+		end
+	end
+end
+
+local function show_cands_input_tags(title, input_mode, default_input_value)
+	if not input_mode then
+		return pick_tag(title)
 	else
 		toggle_tags_hints()
 		local title_len = utf8.len(title) or 0
@@ -880,6 +1033,15 @@ function M:entry(job)
 		local inputted_files = selected_or_hovered_files()
 		local inputted_tags = job.args.tags or job.args.tags or job.args.keys or job.args.key
 		local input_mode = job.args.input
+
+		-- "remove-tag" without a tag given: remove ALL tags from the selected
+		-- files (or the hovered file), without asking which tag.
+		if action == TAG_ACTION.remove and not inputted_tags and not input_mode then
+			enqueue_task(STATE_KEY.tasks_delete_tags, inputted_files)
+			delete_tags()
+			return
+		end
+
 		-- Mode: remove, add, toggle
 		local toggle_mode = action
 		local title = (
@@ -931,7 +1093,31 @@ function M:entry(job)
 		enqueue_task(STATE_KEY.tasks_write_tags_db, changed_tags_db)
 		write_tags_db()
 	elseif action == TAG_ACTION.clear then
-		enqueue_task(STATE_KEY.tasks_delete_tags, selected_or_hovered_files())
+		-- Files selected: clear just those. Nothing selected: clear every tag in
+		-- the current folder, after asking for confirmation.
+		local files_to_clear = selected_files()
+		if #files_to_clear == 0 then
+			local folder = real_str(get_cwd())
+			local tagged = get_state(STATE_KEY.tags_database)[folder] or {}
+			for fname, _ in pairs(tagged) do
+				files_to_clear[#files_to_clear + 1] = pathJoin(folder, fname)
+			end
+			if #files_to_clear == 0 then
+				ya.notify({ title = PackageName, content = "No tagged files in this folder", timeout = 3 })
+				return
+			end
+			local confirmed = ya.confirm({
+				pos = { "center", w = 60, h = 10 },
+				title = ui.Line("Clear all tags?"),
+				body = ui.Text(
+					string.format("Remove the tags from %d file(s) in this folder.", #files_to_clear)
+				),
+			})
+			if not confirmed then
+				return
+			end
+		end
+		enqueue_task(STATE_KEY.tasks_delete_tags, files_to_clear)
 		delete_tags()
 	elseif action == TAG_ACTION.toggle_ui then
 		local ui_mode = job.args.mode
@@ -1006,7 +1192,7 @@ function M:entry(job)
 				table.insert(selected_tag_keys, key)
 			end
 
-			local tags_tbl = tostring(get_cwd())
+			local tags_tbl = real_str(get_cwd())
 			local tags_db = get_state(STATE_KEY.tags_database)
 			local tagged_filenames = tags_db[tags_tbl] or {}
 			for fname, tags in pairs(tagged_filenames) do
@@ -1040,16 +1226,20 @@ function M:entry(job)
 		if #new_selected_files == 0 then
 			return
 		end
-		local valid_selected_files = {}
+		-- Yazi 26.x expects File objects (fs.file), not paths. Paths are dropped,
+		-- and toggle_all with an empty list selects every file in the folder.
+		local files = {}
 		for _, url_raw in ipairs(new_selected_files) do
-			local url = Url(url_raw)
-			local cha = fs.cha(url, {})
-			if cha then
-				valid_selected_files[#valid_selected_files + 1] = url_raw
+			local file = fs.file(Url(url_raw))
+			if file then
+				files[#files + 1] = file
 			end
 		end
-		valid_selected_files.state = "on"
-		ya.emit("toggle_all", valid_selected_files)
+		if #files == 0 then
+			return
+		end
+		files.state = "on"
+		ya.emit("toggle_all", files)
 	elseif action == TAG_ACTION.filter then
 		local filter_tags = {}
 		local inputted_tags = job.args.tags or job.args.tags or job.args.keys or job.args.key
@@ -1069,33 +1259,56 @@ function M:entry(job)
 			table.insert(filter_tags, key)
 		end
 
-		local tags_tbl = tostring(get_cwd())
-		local tags_db = get_state(STATE_KEY.tags_database)
-		local tagged_filenames = tags_db[tags_tbl] or {}
-		local cwd = get_cwd()
+		local tags_tbl = real_str(get_cwd())
+		-- Always filter the real folder, even when already inside a filter view
+		local cwd = Url(tags_tbl)
+		local cwd_cha = fs.cha(cwd, true)
+
+		-- Title shows the tag icons, not the hidden keys
+		local icons = get_state(STATE_KEY.icons) or {}
+		local title_icons = {}
+		for _, key in ipairs(filter_tags) do
+			title_icons[#title_icons + 1] = icons[key] or icons.default or key
+		end
+		local filter_title = "Tagged " .. table.concat(title_icons, " ")
 
 		local id = ya.id("ft")
-		local filter_title = "MODE=(" .. filter_mode .. ")" .. " Tags=(" .. table.concat(filter_tags, "") .. ")"
 		local _cwd = cwd:into_search(filter_title)
 		ya.emit("cd", { Url(_cwd) })
 		ya.emit("update_files", { op = fs.op("part", { id = id, url = Url(_cwd), files = {} }) })
 
-		local files = {}
-		for fname, tags in pairs(tagged_filenames) do
-			if
-				(filter_mode == FILTER_MODE["and"] and tbl_is_subset(filter_tags, tags))
+		local function matches(tags)
+			return (filter_mode == FILTER_MODE["and"] and tbl_is_subset(filter_tags, tags))
 				or (filter_mode == FILTER_MODE["or"] and tbl_contains_any(tags, filter_tags))
-			then
-				local url = _cwd:join(fname)
-				local cha = fs.cha(url, true)
-				if cha then
-					files[#files + 1] = File({ url = url, cha = cha })
+		end
+
+		-- Walk this folder and all its subfolders. Tags are stored in a tree that
+		-- mirrors the real folders (save_path/<folder>/tags.json), so we walk that
+		-- small tree instead of scanning the real disk.
+		local save_path = get_state(STATE_KEY.save_path)
+		local files = {}
+		local function collect(folder, rel)
+			for fname, tags in pairs(read_tags_tbl(folder)) do
+				if matches(tags) then
+					local url = _cwd:join(rel .. fname)
+					local cha = fs.cha(url, true)
+					if cha then
+						files[#files + 1] = File({ url = url, cha = cha })
+					end
+				end
+			end
+			local entries = fs.read_dir(Url(pathJoin(save_path, folder)), { resolve = true }) or {}
+			for _, entry in ipairs(entries) do
+				if entry.cha.is_dir then
+					local name = tostring(entry.name)
+					collect(pathJoin(folder, name), rel .. name .. package.config:sub(1, 1))
 				end
 			end
 		end
+		collect(tags_tbl, "")
 
 		ya.emit("update_files", { op = fs.op("part", { id = id, url = Url(_cwd), files = files }) })
-		ya.emit("update_files", { op = fs.op("done", { id = id, url = _cwd, cha = Cha({ kind = 16 }) }) })
+		ya.emit("update_files", { op = fs.op("done", { id = id, file = { url = Url(_cwd), cha = cwd_cha } }) })
 	elseif action == TAG_ACTION.files_deleted then
 		delete_tags()
 	elseif action == TAG_ACTION.files_transfered then

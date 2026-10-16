@@ -69,11 +69,6 @@ rev = "33cc61a"
 hash = "d7e31c616cc6c8a1f05fdff7c47dae98"
 
 [[plugin.deps]]
-use = "boydaihungst/simple-tag"
-rev = "ebcbc9e"
-hash = "fc8d977f168df8ac6db8b5c1167ec777"
-
-[[plugin.deps]]
 use = "AnirudhG07/rich-preview"
 rev = "7d616ad"
 hash = "d64feec9761392cbc250d199ab4b8a3a"
@@ -82,6 +77,21 @@ hash = "d64feec9761392cbc250d199ab4b8a3a"
 use = "yazi-rs/plugins:vcs-files"
 rev = "c591a36"
 hash = "853240b2454c93a93fd03fc9fd7e06e8"
+
+[[plugin.deps]]
+use = "lpanebr/yazi-plugins:first-non-directory"
+rev = "ea50bee"
+hash = "cfc60cfcc554a59f87122246d03f7e11"
+
+[[plugin.deps]]
+use = "lpnh/fr"
+rev = "aa88cd4"
+hash = "8b0e87c3176e0d44f79a8656f79f0fa"
+
+[[plugin.deps]]
+use = "boydaihungst/simple-tag"
+rev = "7728d5c"
+hash = "eb786acc1ca28d843e701a7d567aeb50"
 
 [[flavor.deps]]
 use = "dangooddd/kanagawa"

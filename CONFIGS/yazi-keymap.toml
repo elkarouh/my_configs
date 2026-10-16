@@ -11,14 +11,14 @@ keymap = [
 	{ on = [ "<C-z>" ], run = "suspend",            desc = "Suspend the process" },
 
 	# Navigation
-	{ on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "j" ], run = "arrow 1",  desc = "Move cursor down" },
+	# { on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
+	# { on = [ "j" ], run = "arrow 1",  desc = "Move cursor down" },
 
-	{ on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
-	{ on = [ "J" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
+	# { on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+	# { on = [ "J" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 
-	{ on = [ "<S-Up>" ],   run = "arrow -5", desc = "Move cursor up 5 lines" },
-	{ on = [ "<S-Down>" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
+	# { on = [ "<S-Up>" ],   run = "arrow -5", desc = "Move cursor up 5 lines" },
+	# { on = [ "<S-Down>" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 
 	# { on = [ "<C-u>" ], run = "arrow -50%",  desc = "Move cursor up half page" },
 	# { on = [ "<C-d>" ], run = "arrow 50%",   desc = "Move cursor down half page" },
@@ -30,24 +30,24 @@ keymap = [
 	{ on = [ "<PageUp>" ],     run = "arrow -100%", desc = "Move cursor up one page" },
 	{ on = [ "<PageDown>" ],   run = "arrow 100%",  desc = "Move cursor down one page" },
 
-	{ on = [ "h" ], run = "leave", desc = "Go back to the parent directory" },
-	{ on = [ "l" ], run = "enter", desc = "Enter the child directory" },
+	# { on = [ "h" ], run = "leave", desc = "Go back to the parent directory" },
+	# { on = [ "l" ], run = "enter", desc = "Enter the child directory" },
 
-	{ on = [ "H" ], run = "back",    desc = "Go back to the previous directory" },
-	{ on = [ "L" ], run = "forward", desc = "Go forward to the next directory" },
+	# { on = [ "H" ], run = "back",    desc = "Go back to the previous directory" },
+	# { on = [ "L" ], run = "forward", desc = "Go forward to the next directory" },
 
-	{ on = [ "<A-k>" ], run = "seek -5", desc = "Seek up 5 units in the preview" },
-	{ on = [ "<A-j>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
-	{ on = [ "<A-PageUp>" ],   run = "seek -5", desc = "Seek up 5 units in the preview" },
-	{ on = [ "<A-PageDown>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
+	# { on = [ "<A-k>" ], run = "seek -5", desc = "Seek up 5 units in the preview" },
+	# { on = [ "<A-j>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
+	# { on = [ "<A-PageUp>" ],   run = "seek -5", desc = "Seek up 5 units in the preview" },
+	# { on = [ "<A-PageDown>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
 
 	{ on = [ "<Up>" ],    run = "arrow -1", desc = "Move cursor up" },
 	{ on = [ "<Down>" ],  run = "arrow 1",  desc = "Move cursor down" },
 	{ on = [ "<Left>" ],  run = "leave",    desc = "Go back to the parent directory" },
 	{ on = [ "<Right>" ], run = "enter",    desc = "Enter the child directory" },
 
-	{ on = [ "g", "g" ], run = "arrow top", desc = "Move cursor to the top" },
-	{ on = [ "G" ],      run = "arrow bot",  desc = "Move cursor to the bottom" },
+	# { on = [ "g", "g" ], run = "arrow top", desc = "Move cursor to the top" },
+	# { on = [ "G" ],      run = "arrow bot",  desc = "Move cursor to the bottom" },
 	{ on = [ "<C-Home>"], run = "arrow top", desc = "Move cursor to the top" },
 	{ on = [ "<C-End>" ], run = "arrow bot",  desc = "Move cursor to the bottom" },
 
@@ -165,26 +165,26 @@ keymap = [
 	# Help
 	{ on = [ "~" ], run = "help", desc = "Open help" },
    
-    { on = [ "b", "t" ], run = "plugin --sync dual-pane toggle", desc = "Dual-pane: toggle" },
-    { on = [ "b", "b" ], run = "plugin --sync dual-pane toggle_zoom", desc = "Dual-pane: toggle zoom" },
-    { on = "<Tab>", run = "plugin --sync dual-pane next_pane",  desc = "Dual-pane: switch to the other pane" },
-    { on = "[", run = "plugin --sync dual-pane 'tab_switch -1 --relative'",  desc = "Dual-pane: switch active to previous tab" },
-    { on = "]", run = "plugin --sync dual-pane 'tab_switch 1 --relative'",  desc = "Dual-pane: switch active to next tab" },
-    { on = "1", run = "plugin --sync dual-pane 'tab_switch 0'", desc = "Switch to the first tab" },
-    { on = "2", run = "plugin --sync dual-pane 'tab_switch 1'", desc = "Switch to the second tab" },
-    { on = "3", run = "plugin --sync dual-pane 'tab_switch 2'", desc = "Switch to the third tab" },
-    { on = "4", run = "plugin --sync dual-pane 'tab_switch 3'", desc = "Switch to the fourth tab" },
-    { on = "5", run = "plugin --sync dual-pane 'tab_switch 4'", desc = "Switch to the fifth tab" },
-    { on = "6", run = "plugin --sync dual-pane 'tab_switch 5'", desc = "Switch to the sixth tab" },
-    { on = "7", run = "plugin --sync dual-pane 'tab_switch 6'", desc = "Switch to the seventh tab" },
-    { on = "8", run = "plugin --sync dual-pane 'tab_switch 7'", desc = "Switch to the eighth tab" },
-    { on = "9", run = "plugin --sync dual-pane 'tab_switch 8'", desc = "Switch to the ninth tab" },
-    { on = "t", run = "plugin --sync dual-pane 'tab_create --current'",  desc = "Dual-pane: create a new tab with CWD" },
-    { on = "<F5>", run = "plugin --sync dual-pane 'copy_files --follow'",  desc = "Dual-pane: copy selected files from active to inactive pane" },
-    { on = "<F6>", run = "plugin --sync dual-pane 'move_files --follow'",  desc = "Dual-pane: move selected files from active to inactive pane" },
-    { on = [ "b", "s" ], run = "plugin --sync dual-pane save_config", desc = "Dual-pane: save current configuration" },
-    { on = [ "b", "l" ], run = "plugin --sync dual-pane load_config", desc = "Dual-pane: load saved configuration" },
-    { on = [ "b", "r" ], run = "plugin --sync dual-pane reset_config", desc = "Dual-pane: reset saved configuration" },
+    { on = [ "b", "t" ], run = "plugin dual-pane -- toggle", desc = "Dual-pane: toggle" },
+    { on = [ "b", "b" ], run = "plugin dual-pane -- toggle_zoom", desc = "Dual-pane: toggle zoom" },
+    { on = "<Tab>", run = "plugin dual-pane -- next_pane",  desc = "Dual-pane: switch to the other pane" },
+    { on = "[", run = "plugin dual-pane -- tab_switch -1 --relative",  desc = "Dual-pane: switch active to previous tab" },
+    { on = "]", run = "plugin dual-pane -- tab_switch 1 --relative",  desc = "Dual-pane: switch active to next tab" },
+    { on = "1", run = "plugin dual-pane -- tab_switch 0", desc = "Switch to the first tab" },
+    { on = "2", run = "plugin dual-pane -- tab_switch 1", desc = "Switch to the second tab" },
+    { on = "3", run = "plugin dual-pane -- tab_switch 2", desc = "Switch to the third tab" },
+    { on = "4", run = "plugin dual-pane -- tab_switch 3", desc = "Switch to the fourth tab" },
+    { on = "5", run = "plugin dual-pane -- tab_switch 4", desc = "Switch to the fifth tab" },
+    { on = "6", run = "plugin dual-pane -- tab_switch 5", desc = "Switch to the sixth tab" },
+    { on = "7", run = "plugin dual-pane -- tab_switch 6", desc = "Switch to the seventh tab" },
+    { on = "8", run = "plugin dual-pane -- tab_switch 7", desc = "Switch to the eighth tab" },
+    { on = "9", run = "plugin dual-pane -- tab_switch 8", desc = "Switch to the ninth tab" },
+    { on = "t", run = "plugin dual-pane -- tab_create --current",  desc = "Dual-pane: create a new tab with CWD" },
+    { on = "<F5>", run = "plugin dual-pane -- copy_files --follow",  desc = "Dual-pane: copy selected files from active to inactive pane" },
+    { on = "<F6>", run = "plugin dual-pane -- move_files --follow",  desc = "Dual-pane: move selected files from active to inactive pane" },
+    { on = [ "b", "s" ], run = "plugin dual-pane -- save_config", desc = "Dual-pane: save current configuration" },
+    { on = [ "b", "l" ], run = "plugin dual-pane -- load_config", desc = "Dual-pane: load saved configuration" },
+    { on = [ "b", "r" ], run = "plugin dual-pane -- reset_config", desc = "Dual-pane: reset saved configuration" },
     { on = [ "b", "c" ], run = "plugin dual-pane -- 'shell_fzf /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command (use fzf)" },
     { on = [ "b", "i" ], run = "plugin dual-pane -- 'shell_fzf --interactive /home/dawsers/.config/yazi/dual-pane.txt'", desc = "Dual-pane: run command interactively (use fzf)" },
 
@@ -219,10 +219,10 @@ keymap = [
 	{ on = [ "<Esc>" ],   run = "close",          desc = "Cancel selection" },
 	{ on = [ "<Enter>" ], run = "close --submit", desc = "Submit the selection" },
 
-	{ on = "k", run = "arrow prev", desc = "Previous line" },
-	{ on = "j", run = "arrow next", desc = "Next line" },
-	{ on = "h", run = "swipe prev", desc = "Swipe to previous file" },
-	{ on = "l", run = "swipe next", desc = "Swipe to next file" },
+	# { on = "k", run = "arrow prev", desc = "Previous line" },
+	# { on = "j", run = "arrow next", desc = "Next line" },
+	# { on = "h", run = "swipe prev", desc = "Swipe to previous file" },
+	# { on = "l", run = "swipe next", desc = "Swipe to next file" },
 
 	{ on = "<Up>",    run = "arrow prev", desc = "Previous line" },
 	{ on = "<Down>",  run = "arrow next", desc = "Next line" },
@@ -445,365 +445,127 @@ desc = "Yazi command prompt"
 # keymap.toml
 
 ######################################################################
+# [[mgr.prepend_keymap]]
+# on = [ "u", "a" ]
+# run = "plugin bookmarks -- save"
+# desc = "Save current position as a bookmark"
+
+# [[mgr.prepend_keymap]]
+# on = [ "u", "g" ]
+# run = "plugin bookmarks -- jump"
+# desc = "Jump to a bookmark"
+
+# [[mgr.prepend_keymap]]
+# on = [ "u", "d" ]
+# run = "plugin bookmarks -- delete"
+# desc = "Delete a bookmark"
+
+# [[mgr.prepend_keymap]]
+# on = [ "u", "D" ]
+# run = "plugin bookmarks -- delete_all"
+# desc = "Delete all bookmarks"
+
+# [[mgr.prepend_keymap]]
+# on = [ "u", "m" ]
+# run = "plugin bookmarks -- modify"
+# desc = "modify key bind to hoverd path"
+#################################### YAMB bookmarks #################################
 [[mgr.prepend_keymap]]
 on = [ "u", "a" ]
-run = "plugin bookmarks -- save"
-desc = "Save current position as a bookmark"
-
-[[mgr.prepend_keymap]]
-on = [ "u", "g" ]
-run = "plugin bookmarks -- jump"
-desc = "Jump to a bookmark"
-
-[[mgr.prepend_keymap]]
-on = [ "u", "d" ]
-run = "plugin bookmarks -- delete"
-desc = "Delete a bookmark"
-
-[[mgr.prepend_keymap]]
-on = [ "u", "D" ]
-run = "plugin bookmarks -- delete_all"
-desc = "Delete all bookmarks"
-
-[[mgr.prepend_keymap]]
-on = [ "u", "m" ]
-run = "plugin bookmarks -- modify"
-desc = "modify key bind to hoverd path"
-#####################################################################
-[[mgr.prepend_keymap]]
-on = [ "U", "a" ]
 run = "plugin yamb -- save"
 desc = "Add bookmark"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "g" ]
+on = [ "u", "g" ]
 run = "plugin yamb -- jump_by_key"
 desc = "Jump bookmark by key"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "G" ]
+on = [ "u", "G" ]
 run = "plugin yamb -- jump_by_fzf"
 desc = "Jump bookmark by fzf"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "d" ]
+on = [ "u", "d" ]
 run = "plugin yamb -- delete_by_key"
 desc = "Delete bookmark by key"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "D" ]
+on = [ "u", "D" ]
 run = "plugin yamb -- delete_by_fzf"
 desc = "Delete bookmark by fzf"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "A" ]
+on = [ "u", "A" ]
 run = "plugin yamb -- delete_all"
 desc = "Delete all bookmarks"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "r" ]
+on = [ "u", "r" ]
 run = "plugin yamb -- rename_by_key"
 desc = "Rename bookmark by key"
 
 [[mgr.prepend_keymap]]
-on = [ "U", "R" ]
+on = [ "u", "R" ]
 run = "plugin yamb -- rename_by_fzf"
 desc = "Rename bookmark by fzf"
+####################### 
+[[mgr.prepend_keymap]]
+on   = [ "j", "j" ]
+run  = "plugin first-non-directory"
+desc = "Jumps to the first file"
+
+[[mgr.prepend_keymap]]
+on = ["j", "r"]
+run = "plugin fr rg"
+desc = "Search file by content (rg)"
+
+[[mgr.prepend_keymap]]
+on = ["j", "a"]
+run = "plugin fr rga"
+desc = "Search file by content (rga)"
 
 ######################################################################
-# Tagging plugin
-#─────────────────────────── TOGGLE TAG(S) ────────────────────────────
-[[mgr.prepend_keymap]]  
-# Toggle a tag (press any tag key)
-# A tag hint window will show up.
-# Simply press any tag key to toggle that tag for selected or hovered files/folders.
-on = [ "T", "t", "k" ]
+# Tagging plugin (simple-tag)
+# Press T to see these 8 options.
+
+[[mgr.prepend_keymap]]
+on = [ "T", "t" ]
 run = "plugin simple-tag -- toggle-tag"
-desc = "Toggle a tag (press any key)" 
+desc = "Toggle a tag"
 
-[[mgr.prepend_keymap]]  
-# Fast Toggle tag(s) with fixed keys=!1q. key=!1q tag=!1q or tags=!1q also work
-# NOTE: For key=" (Quotation mark), then use key=\" (Backslash + Quotation mark) instead.
-on = [ "`" ]
-run = "plugin simple-tag -- toggle-tag --keys=!1q"
-desc = "Toggle tag(s) with fixed tag key(s) = (! and 1 and q)" 
-[[mgr.prepend_keymap]]  
-on = [ "`" ]
-run = "plugin simple-tag -- toggle-tag --keys=*"
-desc = "Toggle tag with fixed tag key = *"
-[[mgr.prepend_keymap]]      
-on = [ "`" ]
-run = "plugin simple-tag -- toggle-tag --key=*"
-desc = "Toggle tag with fixed tag key = *"
-[[mgr.prepend_keymap]]      
-    # Toggle tag(s) with value from input box.
-    # A tag hint window and an input box will show up.
-    # Simply input tag key(s) to toggle that tags for selected or hovered files/folders.
-    # Do not input any delimiter.
-on = [ "T", "t", "i" ]
-run = "plugin simple-tag -- toggle-tag --input"
-desc = "Toggle tag(s) with value from (input box)"
-
-
-#─────────────────────────── ADD TAG(S) ───────────────────────────────
-[[mgr.prepend_keymap]]      
-    # Add a tag (press any tag key)
-    # A tag hint window will show up.
-    # Simply press any new tag key to add to selected or hovered files/folders.
-on = [ "T", "a", "k" ]
+[[mgr.prepend_keymap]]
+on = [ "T", "a" ]
 run = "plugin simple-tag -- add-tag"
-desc = "Add a tag (press any key)"
+desc = "Add a tag"
 
-[[mgr.prepend_keymap]]  
-# Fast Add tag(s) with fixed keys=!1q. key=!1q tag=!1q or tags=!1q also work
-on = [ "T", "a", "f" ]
-run = "plugin simple-tag -- add-tag --keys=!1q"
-desc = "Add tag(s) with fixed tag keys = (! and 1 and q)"
-
-[[mgr.prepend_keymap]]      
-on = [ "T", "a", "f" ]
-run = "plugin simple-tag -- add-tag --keys=*"
-desc = "Add tag with fixed tag key = *" 
-
-[[mgr.prepend_keymap]]      
-on = [ "T", "a", "f" ]
-run = "plugin simple-tag -- add-tag --key=*"
-desc = "Add tag with fixed tag key = *"
-[[mgr.prepend_keymap]]  
-    # Add tag(s) with value from input box.
-    # A tag hint window and an input box will show up.
-    # Simply input new tag key(s) to add to selected or hovered files/folders.
-    # Do not input any delimiter.
-on = [ "T", "a", "i" ]
-run = "plugin simple-tag -- add-tag --input"
-desc = "Add tag(s) with value from (input box)"
-
-
-#─────────────────────────── REMOVE/DELETE TAG(S) ───────────────────────────
-[[mgr.prepend_keymap]]      
-    # Remove a tag (press any tag key)
-    # A tag hint window will show up.
-    # Simply press any tag key to be removed from selected or hovered files/folders.
-on = [ "T", "d", "k" ]
+[[mgr.prepend_keymap]]
+on = [ "T", "d" ]
 run = "plugin simple-tag -- remove-tag"
-desc = "Remove a tag (press any key)" 
+desc = "Remove tags from selected files"
 
-[[mgr.prepend_keymap]]  
-    # Fast Remove tag(s) with fixed keys=!1q. key=!1q tag=!1q or tags=!1q also work
-on = [ "T", "d", "f" ]
-run = "plugin simple-tag -- remove-tag --keys=!1q"
-desc = "Remove tag(s) with fixed tag keys = (! and 1 and q)"
-
-[[mgr.prepend_keymap]]      
-on = [ "T", "d", "f" ]
-run = "plugin simple-tag -- remove-tag --keys=*"
-desc = "Remove tag with fixed tag key = *" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "d", "f" ]
-run = "plugin simple-tag -- remove-tag --key=*"
-desc = "Remove tag with fixed tag key = *" 
-[[mgr.prepend_keymap]]  
-    # Remove tag(s) with value from input box.
-    # A tag hint window and an input box will show up.
-    # Simply input tag key(s) to be removed from selected or hovered files/folders.
-    # Do not input any delimiter.
-on = [ "T", "d", "i" ]
-run = "plugin simple-tag -- remove-tag --input"
-desc = "Remove tag(s) with value from (input box)" 
-
-
-    #─────────────────────────── REPLACE ALL OLD TAG(S) WITH NEW TAG(S) ───────────────────────────
-[[mgr.prepend_keymap]]      
-    # Replace a tag (press any tag key)
-    # A tag hint window will show up.
-    # Simply press any new tag key for selected or hovered files/folders.
-on = [ "T", "r", "k" ]
-run = "plugin simple-tag -- replace-tag"
-desc = "Replace with a new tag (press any key)" 
-[[mgr.prepend_keymap]]  
-    # Fast Replace tag(s) with fixed keys=!1q. key=!1q tag=!1q or tags=!1q also work
-on = [ "T", "r", "f" ]
-run = "plugin simple-tag -- replace-tag --keys=!1q"
-desc = "Replace tag(s) with fixed tag keys = (! and 1 and q)" 
-[[mgr.prepend_keymap]]  
-on = [ "T", "r", "f" ]
-run = "plugin simple-tag -- replace-tag --keys=*"
-desc = "Replace tag(s) with fixed tag key = *"
-[[mgr.prepend_keymap]]      
-on = [ "T", "r", "f" ]
-run = "plugin simple-tag -- replace-tag --key=*"
-desc = "Replace tag(s) with fixed tag key = *" 
-[[mgr.prepend_keymap]]  
-    # Replace tag(s) with value from input box.
-    # A tag hint window and an input box will show up.
-    # Simply input new tag key(s) for selected or hovered files/folders.
-    # Do not input any delimiter.
-on = [ "T", "r", "i" ]
-run = "plugin simple-tag -- replace-tag --input"
-desc = "Replace tag(s) with value from (input box)" 
-
-
-    #─────────────────────────── EDIT TAG(S) ───────────────────────────
-[[mgr.prepend_keymap]]      
-    # Edit a tag for hovered or selected files/folders
-    # An input box with current tagged keys and a tag hint window will show up for each hovered or selected files/folders.
-    # Simply edit tag key(s) for selected or hovered files/folders.
-    # If you cancel any input box, all changes will be discarded.
-on = [ "T", "e" ]
-run = "plugin simple-tag -- edit-tag "
-desc = "Edit tag(s) (input box)" 
-
-
-    #  ───────────────────────────── CLEAR TAG(S) ─────────────────────────────
-[[mgr.prepend_keymap]]      
-    # Clear all tags from selected or hovered files/folders
+[[mgr.prepend_keymap]]
 on = [ "T", "c" ]
 run = "plugin simple-tag -- clear"
-desc = "Clear all tags from selected or hovered files" 
+desc = "Clear all tags"
 
-
-    #  ───────────────────────────── CHANGE UI ─────────────────────────────
-[[mgr.prepend_keymap]]      
-    # Switch tag indicator between icon > tag key > hidden.
-    # Useful when u don't remember the tag key
-on = [ "T", "u", "s" ]
-run = "plugin simple-tag -- toggle-ui"
-desc = "Toggle tag indicator (icon > tag key > hidden)" 
-[[mgr.prepend_keymap]]  
-    # Fixed tag indicator mode = hidden (Available modes: hidden|icon|text)
-on = [ "T", "u", "h" ]
-run = "plugin simple-tag -- toggle-ui --mode=hidden"
-desc = "Hide all tags indicator" 
-
-    #  ─────────────────────── FILTER FILES/FOLDERS BY TAGS: ───────────────────────
-    # Available filter modes:
-    # and → Filter files which contain all of selected tags (Default if mode isn't specified).
-    # or → Filter files which contain at least one of selected tags.
-
-    # Filter files/folders by tags
-[[mgr.prepend_keymap]]  
-    # Filter files/folders by a tag (press any tag key)
-    # A tag hint window will show up.
-    # Simply press any new tag key to filter files/folders containing that tag in current directory.
+[[mgr.prepend_keymap]]
 on = [ "T", "f" ]
 run = "plugin simple-tag -- filter"
-desc = "Filter files/folders by a tag (press any key)" 
+desc = "Show only files with a tag"
 
-    # Fast Filter files/folders with fixed keys=!1q. key=!1q tag=!1q or tags=!1q also work
-    # { on = [ "T", "f" ], run = "plugin simple-tag -- filter --key=!", desc = "Filter files/folders by a fixed tag = !" },
-    # { on = [ "T", "f" ], run = "plugin simple-tag -- filter --keys=!1q", desc = "Filter files/folders by multiple fixed tag(s) (! and 1 and q)" },
-
-    # Filter files/folders by tag(s) with value from input box.
-    # An input box and a tag hint window will show up.
-    # Simply input tag key(s) to filter files/folders of current directory.
-    # Do not input any delimiter.
-    # For example: Input value or --keys=!1q -> filter any files/folders contain all of these tags (! and 1 and q) in current directory.
-[[mgr.prepend_keymap]]      
-on = [ "T", "F" ]
-run = "plugin simple-tag -- filter --input"
-desc = "Filter files/folders by tag(s) (input box)"
-[[mgr.prepend_keymap]]  
-    # Filter files/folders by tag(s) with --mode=or.
-    # --mode=or -> Input value or --keys = !1q -> filter any files/folders contain at least one of these tags (! or 1 or q)
-on = [ "T", "F" ]
-run = "plugin simple-tag -- filter --input --mode=or"
-desc = "Filter files/folders by contain tags (input box)"
-    # { on = [ "T", "F" ], run = "plugin simple-tag -- filter --keys=!1q --mode=or", desc = "Filter files/folders by multiple fixed tag(s) (! or 1 or q)" },
-
-
-    #  ─────────────────────── VISUAL SELECT FILES/FOLDERS BY TAGS: ───────────────────────
-
-    # Avaiable selection actions:
-    # replace → Replaces the current selection list with files/folders that have the selected tag.
-    # unite → Combines the currently selected files/folders with those that have the selected tag.
-    # intersect → Keeps only the files/folders that are present in both the current selection and the tagged items.
-    # subtract → Deselects files/folders that have the selected tag.
-    # exclude → Keeps only the files/folders that do not have the selected tag.
-    # undo → Undos or redoes the last selection action.
-
-    # which_key will popup to choose selection mode
-    # And a tag hint window will show up.
-[[mgr.prepend_keymap]]      
-    # Simply select a selection mode then press any tag key to select files/folders
-on = [ "T", "s", "t" ]
-run = "plugin simple-tag -- toggle-select"
-desc = "Select a selection action then select a tag key (toggle-select)" 
-    # fixed tag(s). --keys=!1q or --key=!1q or --tag=!1q or --tags=!1q. They are the same.
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "t" ]
-run = "plugin simple-tag -- toggle-select --keys=!1q"
-desc = "" 
-
-    # Run action on files/folders by a tag.
-    # A tag hint window will show up.
-    # Simply press any tag key to do the folowing action:
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "r" ]
-run = "plugin simple-tag -- replace-select"
-desc = "replace-select" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "u" ]
-run = "plugin simple-tag -- unite-select"
-desc = "unite-select" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "i" ]
-run = "plugin simple-tag -- intersect-select"
-desc = "intersect-select" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "s" ]
-run = "plugin simple-tag -- subtract-select"
-desc = "subtract-select" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "e" ]
-run = "plugin simple-tag -- exclude-select"
-desc = "exclude-select" 
-[[mgr.prepend_keymap]]      
-    # Run action on files/folders by fixed tag(s). --keys=!1q or --key=!1q or --tag=!1q or --tags=!1q. They are the same.
-on = [ "T", "s", "e" ]
-run = "plugin simple-tag -- replace-select --keys=!1q"
-desc = "Replaces the current selection list with files/folders that have (! and 1 and q) tag(s)" 
-
-    # Run action on files/folders by tag(s) with value from input box.
-    # A tag hint window will show up.
-[[mgr.prepend_keymap]]      
-    # Simply input tag key(s) to do the folowing action:
-on = [ "T", "s", "R" ]
-run = "plugin simple-tag -- replace-select --input"
-desc = "replace-select --input" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "U" ]
-run = "plugin simple-tag -- unite-select --input"
-desc = "unite-select --input" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "I" ]
-run = "plugin simple-tag -- intersect-select --input"
-desc = "intersect-select --input" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "S" ]
-run = "plugin simple-tag -- subtract-select --input"
-desc = "subtract-select --input" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "E" ]
-run = "plugin simple-tag -- exclude-select --input"
-desc = "exclude-select --input" 
-    # it also support --mode=or when using with --input or --keys=!1q or --key=!1q or --tag=!1q or --tags=!1q
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "R" ]
-run = "plugin simple-tag -- replace-select --input --mode=or"
-desc = "replace-select --input --mode=or" 
-[[mgr.prepend_keymap]]      
-on = [ "T", "s", "R" ]
-run = "plugin simple-tag -- replace-select --keys=!1q --mode=or"
-desc = "replace-select --keys=!1q --mode=or" 
-[[mgr.prepend_keymap]]  
-    # Undo/Redo selection (only works after using 5 modes above)
-on = [ "T", "s", "u" ]
-run = "plugin simple-tag -- undo-select"
-desc = "Undos/Redos the last selection action" 
-	# show git file changes
 [[mgr.prepend_keymap]]
-on   = [ "g", "c" ]
-run  = "plugin vcs-files"
-desc = "Show Git file changes"
+on = [ "T", "s" ]
+run = "plugin simple-tag -- replace-select"
+desc = "Select files with a tag"
 
+[[mgr.prepend_keymap]]
+on = [ "T", "u" ]
+run = "plugin simple-tag -- toggle-ui"
+desc = "Cycle tag display: icon/text/hidden"
 
+# Quick toggle of the * tag with a single key
+[[mgr.prepend_keymap]]
+on = [ "`" ]
+run = "plugin simple-tag -- toggle-tag --key=*"
+desc = "Toggle the * tag"

@@ -1,31 +1,24 @@
-local function setup()
-	Manager.render = function(self, area)
-		local chunks = self:layout(area)
+--- @since 26.8.15
 
-		local bar = function(c, x, y)
-			x, y = math.max(0, x), math.max(0, y)
-			return ui.Bar(ui.Rect { x = x, y = y, w = ya.clamp(0, area.w - x, 1), h = math.min(1, area.h) }, ui.Bar.TOP)
-				:symbol(c)
-		end
+local function setup(_, opts)
+	local type = opts and opts.type or ui.Border.ROUNDED
+	local old_build = Tab.build
 
-		return ya.flat {
-			-- Borders
-			ui.Border(area, ui.Border.ALL):type(ui.Border.ROUNDED),
-			ui.Bar(chunks[1], ui.Bar.RIGHT),
-			ui.Bar(chunks[3], ui.Bar.LEFT),
-
-			bar("┬", chunks[1].right - 1, chunks[1].y),
-			bar("┴", chunks[1].right - 1, chunks[1].bottom - 1),
-			bar("┬", chunks[2].right, chunks[2].y),
-			bar("┴", chunks[2].right, chunks[1].bottom - 1),
-
-			-- Parent
-			Parent:render(chunks[1]:padding(ui.Padding.xy(1))),
-			-- Current
-			Current:render(chunks[2]:padding(ui.Padding.y(1))),
-			-- Preview
-			Preview:render(chunks[3]:padding(ui.Padding.xy(1))),
+	Tab.build = function(self, ...)
+		local c = self._chunks
+		self._chunks = {
+			c[1]:pad(ui.Pad.y(1)),
+			c[2]:pad(ui.Pad.y(1)),
+			c[3]:pad(ui.Pad.y(1)),
 		}
+
+		local style = th.mgr.border_style
+		self._base = ya.list_merge(self._base or {}, {
+			ui.Border(ui.Edge.ALL):area(c[2]):type(type):style(style),
+			ui.Border(ui.Edge.ALL):area(self._area):type(type):style(style):merge(),
+		})
+
+		old_build(self, ...)
 	end
 end
 
