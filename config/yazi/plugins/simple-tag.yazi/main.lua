@@ -374,7 +374,7 @@ end)
 -- Real path of a url as a string. Inside a filter/search view yazi uses
 -- "search://" urls; tags are stored under the real folder path.
 local function real_str(u)
-	if u.spec and u.spec.is_search then
+	if u.spec and u.spec.is_view then
 		return tostring(u.path)
 	end
 	return tostring(u)

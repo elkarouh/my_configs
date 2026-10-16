@@ -182,7 +182,7 @@ rules = [
 
 [icon]
 
-rules = [
+globs = [
 	# Programming
 	{ url ="*.c"    , text = "", fg = "#599eff" },
 	{ url ="*.cpp"  , text = "", fg = "#519aba" },
@@ -334,3 +334,12 @@ rules = [
 ]
 
 # : }}}
+
+# Search prompts (moved here from [input] search_* in yazi.toml in 26.9)
+[fd]
+title    = "Search via fd:"
+position = { at = "top-center", y = 2, w = 50, h = 3 }
+
+[rg]
+title    = "Search via rg:"
+position = { at = "top-center", y = 2, w = 50, h = 3 }

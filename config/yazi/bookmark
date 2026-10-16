@@ -1,14 +1,6 @@
-yazi	/auto/home/ekhassan/.config/yazi/	y
-test_reports	/cm/ot/TACT/test_reports/	T
-my emacs libraries	/auto/home/ekhassan/EMACS_STUFF/my-libraries/	m
-ifps	/auto/home/ekhassan/LOCAL_SSD/ETFMS/ifps1/	i
-TRASH	/auto/home/ekhassan/TRASH/	t
-TACT	/auto/home/ekhassan/LOCAL_SSD/ETFMS/TACT/	a
-SHELL_SETTINGS	/auto/home/ekhassan/LOCAL/SHELL_SETTINGS/	h
-Python site-packages	/auto/home/ekhassan/LOCAL/lib/python3.11/site-packages/	p
-NAS data	/cfmu/nasdata/ops/ftps/	n
-My Views	/auto/home/ekhassan/cm/	v
-LOCAL VOB	/auto/home/ekhassan/LOCAL_SSD/INM/	V
-ETFMSw	/auto/home/ekhassan/LOCAL_SSD/ETFMS/	e
+SHELL_SETTINGS	/auto/home/ekhassan/LOCAL/SHELL_SETTINGS/	s
+GITHUB-REPOS	/auto/home/ekhassan/Downloads/GITHUB-REPOS/	0
+Desktop	/home/ekhassan/Desktop/	d
 Desktop	/auto/home/ekhassan/Desktop/	d
-.config	/auto/home/ekhassan/.config/	c
+CONFIGS	/auto/home/ekhassan/LOCAL/CONFIGS/	c
+.config	/auto/home/ekhassan/.config/	.
