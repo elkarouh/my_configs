@@ -46,6 +46,8 @@ config/yazi/yazi.toml|$HOME/.config/yazi/yazi.toml
 config/yazi/flavors|$HOME/.config/yazi/flavors
 config/yazi/plugins/augment-command.yazi|$HOME/.config/yazi/plugins/augment-command.yazi
 config/yazi/plugins/chmod.yazi|$HOME/.config/yazi/plugins/chmod.yazi
+config/yazi/plugins/yamb.yazi|$HOME/.config/yazi/plugins/yamb.yazi
+config/yazi/plugins/bookmarks.yazi|$HOME/.config/yazi/plugins/bookmarks.yazi
 config/yazi/plugins/command.yazi|$HOME/.config/yazi/plugins/command.yazi
 config/yazi/plugins/custom-shell.yazi|$HOME/.config/yazi/plugins/custom-shell.yazi
 config/yazi/plugins/dual-pane.yazi|$HOME/.config/yazi/plugins/dual-pane.yazi

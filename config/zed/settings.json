@@ -17,10 +17,16 @@
     "model_parameters": []
   },
   "agent_servers": {
+    "antigravity-acp": {
+      "type": "registry"
+    },
     "claude-acp": {
       "type": "registry"
     },
     "codex-acp": {
+      "default_config_options": {
+        "model": "gpt-5.5"
+      },
       "type": "registry"
     },
     "gemini": {
@@ -219,7 +225,7 @@
     "mode": "light"
   },
   "title_bar": {
-    "show_branch_icon": true,
+    "show_branch_status_icon": true,
     "show_branch_name": true,
     "show_onboarding_banner": false,
     "show_project_items": false,
